@@ -567,7 +567,7 @@ function openModal(matchId) {
       ? `<div class="modal-adv">Пройшла далі збірна → ${advTeam.flag} ${advTeam.name}</div>` : '';
     bodyHtml = `
       <div class="modal-result">
-        <div class="result-score">Результат (90 хв): <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
+        <div class="result-score">Результат (90 хв) — <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
         ${advHtml}
         ${pred
           ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
