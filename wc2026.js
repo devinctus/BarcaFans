@@ -571,9 +571,10 @@ async function loadMatchBetters(matchId) {
     const el = document.getElementById('modalBetters');
     if (!el) return;
     if (!names.length) {
-      el.innerHTML = `<p class="modal-betters-empty">Ніхто ще не зробив свою ставку на гру</p>`;
+      el.innerHTML = `<div class="modal-betters-box modal-betters-empty-box"><p class="modal-betters-empty">Ніхто ще не зробив свою ставку на гру</p></div>`;
     } else {
-      el.innerHTML = `<p class="modal-betters-list"><span class="modal-betters-label">Ставка прийнята від:</span> ${names.join(', ')}</p>`;
+      const rows = names.map(n => `<div class="modal-betters-name">👤 ${n}</div>`).join('');
+      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Ставка прийнята від:</div>${rows}</div>`;
     }
   } catch(e) {}
 }
