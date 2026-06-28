@@ -41,14 +41,14 @@ function calcPoints(pH, pA, rH, rA) {
 
 /* ── HELPERS ── */
 function getStatus(match) {
-  const now     = Date.now();
-  const kickoff = new Date(match.kickoff).getTime();
-  const deadline = kickoff + 90  * 60000;
-  const endTime  = kickoff + 150 * 60000;
+  const now        = Date.now();
+  const kickoff    = new Date(match.kickoff).getTime();
+  const predCutoff = kickoff - 60 * 60000;  // закрити ставки за 60 хв до початку
+  const endTime    = kickoff + 150 * 60000;
   const res = results[match.id];
-  if (res && res.status === 'finished') return 'finished';
-  if (now >= kickoff && now < endTime)  return 'live';
-  if (now >= deadline)                  return 'closed';
+  if (res && res.status === 'finished')  return 'finished';
+  if (now >= kickoff && now < endTime)   return 'live';
+  if (now >= predCutoff)                 return 'closed';
   return 'upcoming';
 }
 
@@ -313,7 +313,7 @@ function openModal(matchId) {
     bodyHtml = `
       <div class="modal-closed">
         <div class="closed-icon">${status === 'live' ? '🔴' : '🔒'}</div>
-        <p>${status === 'live' ? 'Матч вже йде — ставки закрито' : 'Ставки закрито'}</p>
+        <p>${status === 'live' ? 'Матч вже йде — ставки закрито' : 'Ставки закрито — до початку менше 60 хвилин'}</p>
         ${pred
           ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
           : `<div class="pred-score grey">Ти не встиг зробити прогноз</div>`}
@@ -337,7 +337,7 @@ function openModal(matchId) {
         <button type="submit" class="btn-submit">
           ${pred ? '🔄 Оновити прогноз' : '⚽ Зробити ставку'}
         </button>
-        <p class="deadline-note">⏱ Ставки приймаються до 90-ї хвилини матчу</p>
+        <p class="deadline-note">🔒 Ставки закриваються за 60 хвилин до початку матчу</p>
       </form>`;
   }
 
