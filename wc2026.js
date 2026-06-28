@@ -189,6 +189,14 @@ async function saveUserProfile(user) {
   }, { merge: true });
 }
 
+/* ── LOADING STATE ── */
+let _authReady = false, _resultsReady = false;
+function checkHideLoading() {
+  if (!_authReady || !_resultsReady) return;
+  const el = document.getElementById('loadingScreen');
+  if (el) el.classList.add('hidden');
+}
+
 auth.onAuthStateChanged(async user => {
   currentUser = user;
   if (predUnsubscribe) { predUnsubscribe(); predUnsubscribe = null; }
@@ -206,6 +214,8 @@ auth.onAuthStateChanged(async user => {
   }
   updateNavbar(user);
   toggleAdmin(user);
+  _authReady = true;
+  checkHideLoading();
 });
 
 /* ── RESULTS LISTENER ── */
@@ -214,6 +224,7 @@ db.collection('results').onSnapshot(snap => {
   snap.forEach(d => { results[d.id] = d.data(); });
   renderAll();
   rebuildLeaderboard();
+  if (!_resultsReady) { _resultsReady = true; checkHideLoading(); }
 });
 
 /* ── LEADERBOARD ── */
@@ -600,18 +611,43 @@ function openModal(matchId) {
 async function loadMatchBetters(matchId) {
   try {
     const snap = await db.collection('predictions').where('matchId', '==', matchId).get();
-    const names = [];
+    const el = document.getElementById('modalBetters');
+    if (!el) return;
+    const res = results[matchId];
+    const finished = res && res.status === 'finished';
+    const entries = [];
     snap.forEach(d => {
       const p = d.data();
       if (!p.displayName) return;
-      names.push(p.email === ADMIN_EMAIL ? 'Admin' : p.displayName);
+      entries.push(p);
     });
-    const el = document.getElementById('modalBetters');
-    if (!el) return;
-    if (!names.length) {
+    if (!entries.length) {
       el.innerHTML = `<div class="modal-betters-box modal-betters-empty-box"><p class="modal-betters-empty">Ніхто ще не зробив свою ставку на гру</p></div>`;
+      return;
+    }
+    if (finished) {
+      entries.sort((a, b) => {
+        const pa = calcPoints(a.homeGoals, a.awayGoals, res.homeGoals, res.awayGoals);
+        const pb = calcPoints(b.homeGoals, b.awayGoals, res.homeGoals, res.awayGoals);
+        return pb - pa;
+      });
+      const rows = entries.map(p => {
+        const name = p.email === ADMIN_EMAIL ? 'Admin' : p.displayName;
+        const pts = calcPoints(p.homeGoals, p.awayGoals, res.homeGoals, res.awayGoals);
+        const ptsClass = pts === 3 ? 'pts-gold' : pts === 1 ? 'pts-green' : 'pts-red';
+        const ptsLabel = pts === 3 ? '3 бали 🎯' : pts === 1 ? '1 бал ✅' : '0 балів';
+        return `<div class="modal-betters-row">
+          <span class="modal-betters-row-name">👤 ${name}</span>
+          <span class="modal-betters-row-pred">${p.homeGoals}:${p.awayGoals}</span>
+          <span class="modal-betters-row-pts ${ptsClass}">${ptsLabel}</span>
+        </div>`;
+      }).join('');
+      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Прогнози учасників:</div>${rows}</div>`;
     } else {
-      const rows = names.map(n => `<div class="modal-betters-name">👤 ${n}</div>`).join('');
+      const rows = entries.map(p => {
+        const name = p.email === ADMIN_EMAIL ? 'Admin' : p.displayName;
+        return `<div class="modal-betters-name">👤 ${name}</div>`;
+      }).join('');
       el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Ставка прийнята від:</div>${rows}</div>`;
     }
   } catch(e) {}
