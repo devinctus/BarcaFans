@@ -66,7 +66,7 @@
 /* ── WC HERO ── */
 .wc-hero {
   text-align: center;
-  padding: 3.5rem 2rem 2.5rem;
+  padding: 3rem 2rem 2.5rem;
   background: radial-gradient(ellipse at center, rgba(0,77,152,0.2) 0%, transparent 70%);
 }
 .wc-hero h1 {
@@ -153,6 +153,11 @@
 .match-card.finished { border-color: rgba(255,255,255,0.1); }
 .match-card.live { border-color: #ff4444; box-shadow: 0 0 10px rgba(255,68,68,0.2); }
 
+/* ── TBD MATCH CARD ── */
+.match-card.tbd { opacity: 0.55; cursor: default; }
+.match-card.tbd:hover { transform: none; box-shadow: none; border-color: rgba(255,255,255,0.07); }
+.match-card.tbd .vs { color: rgba(255,255,255,0.3); }
+
 .match-teams {
   display: flex;
   align-items: center;
@@ -227,6 +232,24 @@
   padding: 0.2rem 0.65rem;
   display: inline-block;
 }
+.match-cta-done {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.28);
+  border-radius: 1rem;
+  padding: 0.2rem 0.65rem;
+  display: inline-block;
+}
+
+/* ── ADVANCER BADGE ON CARD ── */
+.match-adv {
+  font-size: 0.78rem;
+  color: #4ade80;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.match-adv.champ { color: var(--barca-gold); font-size: 0.85rem; }
+.match-adv.third { color: #cd7f32; }
 
 /* ── SCORING RULES ── */
 .rules-section {
@@ -458,6 +481,85 @@
 .pts-msg.green { background: rgba(74,222,128,0.12); color: #4ade80; }
 .pts-msg.red { background: rgba(248,113,113,0.12); color: #f87171; }
 
+/* ── MODAL EXTRAS ── */
+.modal-tbd { text-align: center; padding: 1.5rem 0; color: var(--text-secondary); line-height: 1.8; }
+.modal-adv { font-size: 0.9rem; color: #4ade80; font-weight: 600; margin-bottom: 0.7rem; }
+.modal-team.tbd { opacity: 0.5; }
+
+/* Current bet display in modal */
+.modal-current-bet {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(74,222,128,0.08) 0%, rgba(74,222,128,0.03) 100%);
+  border: 1px solid rgba(74,222,128,0.22);
+  border-left: 3px solid #4ade80;
+  border-radius: 0.8rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 14px rgba(74,222,128,0.07);
+}
+.modal-current-bet-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #4ade80;
+  letter-spacing: 0.01em;
+}
+.modal-current-bet-score {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #fff;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0.5rem;
+  padding: 0.1rem 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+/* Betters list in modal */
+.modal-betters {
+  margin-top: 1.1rem;
+}
+.modal-betters-loading {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.2);
+  text-align: center;
+  padding: 0.5rem 0;
+}
+.modal-betters-box {
+  background: linear-gradient(135deg, rgba(74,222,128,0.08) 0%, rgba(74,222,128,0.03) 100%);
+  border: 1px solid rgba(74,222,128,0.22);
+  border-left: 3px solid #4ade80;
+  border-radius: 0.8rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 14px rgba(74,222,128,0.07);
+}
+.modal-betters-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #4ade80;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.45rem;
+}
+.modal-betters-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 0.2rem 0;
+}
+.modal-betters-empty-box {
+  border-color: rgba(255,255,255,0.1);
+  border-left-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.02);
+  box-shadow: none;
+}
+.modal-betters-empty {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.3);
+  font-style: italic;
+  margin: 0;
+}
+
 /* ── ADMIN PANEL ── */
 .admin-section {
   padding: 3rem 2rem;
@@ -472,6 +574,19 @@
   margin-bottom: 1rem;
   color: var(--barca-gold);
 }
+
+.admin-round-group { margin-bottom: 2rem; }
+.admin-round-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
 .admin-match-row {
   display: flex;
   flex-direction: column;
