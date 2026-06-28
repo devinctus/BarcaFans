@@ -178,8 +178,19 @@ function fmtDate(iso) {
 }
 
 /* ── AUTH ── */
-function login()  { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
+function login() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  if (isMobile) {
+    auth.signInWithRedirect(provider).catch(console.error);
+  } else {
+    auth.signInWithPopup(provider).catch(console.error);
+  }
+}
 function logout() { auth.signOut(); }
+
+auth.getRedirectResult().catch(console.error);
 
 async function saveUserProfile(user) {
   await db.collection('users').doc(user.uid).set({
