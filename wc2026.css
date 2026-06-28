@@ -241,6 +241,9 @@
   color: var(--barca-gold);
   font-weight: 600;
 }
+.match-cta-done {
+  color: #4ade80;
+}
 
 /* ── ADVANCER BADGE ON CARD ── */
 .match-adv {
@@ -306,6 +309,8 @@
 }
 .leaderboard-table tr:last-child td { border-bottom: none; }
 .leaderboard-table tr.my-row td { background: rgba(0,77,152,0.12); }
+.leaderboard-table tr.my-row:first-child td:first-child { border-radius: 0.5rem 0 0 0.5rem; }
+.leaderboard-table tr.my-row:first-child td:last-child { border-radius: 0 0.5rem 0.5rem 0; }
 
 .rank { font-size: 1.1rem; font-weight: 700; width: 2rem; }
 .player { display: flex; align-items: center; gap: 0.7rem; font-weight: 600; }
@@ -376,6 +381,7 @@
 .modal-vs { color: var(--text-secondary); font-size: 1rem; font-weight: 700; }
 .modal-date { font-size: 0.85rem; color: var(--text-secondary); }
 
+/* Score input */
 .score-input {
   display: flex;
   align-items: center;
@@ -427,6 +433,7 @@
 
 .deadline-note { font-size: 0.8rem; color: var(--text-secondary); text-align: center; }
 
+/* Modal states */
 .modal-login-prompt { text-align: center; padding: 1rem 0; }
 .modal-login-prompt p { color: var(--text-secondary); margin-bottom: 1.2rem; }
 
@@ -445,6 +452,29 @@
 .modal-tbd { text-align: center; padding: 1.5rem 0; color: var(--text-secondary); line-height: 1.8; }
 .modal-adv { font-size: 0.9rem; color: #4ade80; font-weight: 600; margin-bottom: 0.7rem; }
 .modal-team.tbd { opacity: 0.5; }
+
+/* Current bet display in modal */
+.modal-current-bet {
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.25);
+  border-radius: 0.8rem;
+  padding: 0.9rem 1rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+.modal-current-bet-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4ade80;
+  margin-bottom: 0.4rem;
+}
+.modal-current-bet-score {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fff;
+}
 
 /* ── ADMIN PANEL ── */
 .admin-section {
