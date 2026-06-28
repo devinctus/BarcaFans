@@ -6,23 +6,23 @@ const db   = firebase.firestore();
 /* ── MATCHES DATA ── */
 const MATCHES = [
   // LEFT
-  { id:'r32_01', side:'left',  home:{code:'GER',flag:'🇩🇪',name:'Німеччина'},   away:{code:'PAR',flag:'🇵🇾',name:'Парагвай'},     kickoff:'2026-06-29T15:00:00Z' },
-  { id:'r32_02', side:'left',  home:{code:'FRA',flag:'🇫🇷',name:'Франція'},      away:{code:'SWE',flag:'🇸🇪',name:'Швеція'},       kickoff:'2026-06-29T18:00:00Z' },
-  { id:'r32_03', side:'left',  home:{code:'RSA',flag:'🇿🇦',name:'ПАР'},          away:{code:'CAN',flag:'🇨🇦',name:'Канада'},       kickoff:'2026-06-30T15:00:00Z' },
-  { id:'r32_04', side:'left',  home:{code:'NED',flag:'🇳🇱',name:'Нідерланди'},   away:{code:'MOR',flag:'🇲🇦',name:'Марокко'},      kickoff:'2026-06-30T18:00:00Z' },
-  { id:'r32_05', side:'left',  home:{code:'POR',flag:'🇵🇹',name:'Португалія'},   away:{code:'CRO',flag:'🇭🇷',name:'Хорватія'},     kickoff:'2026-07-01T15:00:00Z' },
-  { id:'r32_06', side:'left',  home:{code:'SPA',flag:'🇪🇸',name:'Іспанія'},      away:{code:'AUT',flag:'🇦🇹',name:'Австрія'},      kickoff:'2026-07-01T18:00:00Z' },
-  { id:'r32_07', side:'left',  home:{code:'USA',flag:'🇺🇸',name:'США'},          away:{code:'BIH',flag:'🇧🇦',name:'Боснія'},       kickoff:'2026-07-02T15:00:00Z' },
-  { id:'r32_08', side:'left',  home:{code:'BEL',flag:'🇧🇪',name:'Бельгія'},      away:{code:'SEN',flag:'🇸🇳',name:'Сенегал'},      kickoff:'2026-07-02T18:00:00Z' },
+  { id:'r32_03', side:'left',  home:{code:'RSA',flag:'🇿🇦',name:'ПАР'},          away:{code:'CAN',flag:'🇨🇦',name:'Канада'},       kickoff:'2026-06-28T19:00:00Z' },
+  { id:'r32_01', side:'left',  home:{code:'GER',flag:'🇩🇪',name:'Німеччина'},     away:{code:'PAR',flag:'🇵🇾',name:'Парагвай'},     kickoff:'2026-06-29T20:30:00Z' },
+  { id:'r32_04', side:'left',  home:{code:'NED',flag:'🇳🇱',name:'Нідерланди'},   away:{code:'MOR',flag:'🇲🇦',name:'Марокко'},      kickoff:'2026-06-30T01:00:00Z' },
+  { id:'r32_02', side:'left',  home:{code:'FRA',flag:'🇫🇷',name:'Франція'},      away:{code:'SWE',flag:'🇸🇪',name:'Швеція'},       kickoff:'2026-06-30T21:00:00Z' },
+  { id:'r32_08', side:'left',  home:{code:'BEL',flag:'🇧🇪',name:'Бельгія'},      away:{code:'SEN',flag:'🇸🇳',name:'Сенегал'},      kickoff:'2026-07-01T20:00:00Z' },
+  { id:'r32_07', side:'left',  home:{code:'USA',flag:'🇺🇸',name:'США'},          away:{code:'BIH',flag:'🇧🇦',name:'Боснія'},       kickoff:'2026-07-02T00:00:00Z' },
+  { id:'r32_06', side:'left',  home:{code:'SPA',flag:'🇪🇸',name:'Іспанія'},      away:{code:'AUT',flag:'🇦🇹',name:'Австрія'},      kickoff:'2026-07-02T19:00:00Z' },
+  { id:'r32_05', side:'left',  home:{code:'POR',flag:'🇵🇹',name:'Португалія'},   away:{code:'CRO',flag:'🇭🇷',name:'Хорватія'},     kickoff:'2026-07-02T23:00:00Z' },
   // RIGHT
-  { id:'r32_09', side:'right', home:{code:'BRA',flag:'🇧🇷',name:'Бразилія'},     away:{code:'JAP',flag:'🇯🇵',name:'Японія'},       kickoff:'2026-06-29T15:00:00Z' },
-  { id:'r32_10', side:'right', home:{code:'CIV',flag:'🇨🇮',name:"Кот-д'Івуар"}, away:{code:'NOR',flag:'🇳🇴',name:'Норвегія'},     kickoff:'2026-06-29T18:00:00Z' },
-  { id:'r32_11', side:'right', home:{code:'MEX',flag:'🇲🇽',name:'Мексика'},      away:{code:'ECU',flag:'🇪🇨',name:'Еквадор'},      kickoff:'2026-06-30T15:00:00Z' },
-  { id:'r32_12', side:'right', home:{code:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Англія'},       away:{code:'DRC',flag:'🇨🇩',name:'ДР Конго'},      kickoff:'2026-06-30T18:00:00Z' },
-  { id:'r32_13', side:'right', home:{code:'ARG',flag:'🇦🇷',name:'Аргентина'},    away:{code:'CPV',flag:'🇨🇻',name:'Кабо-Верде'},   kickoff:'2026-07-01T15:00:00Z' },
-  { id:'r32_14', side:'right', home:{code:'AUS',flag:'🇦🇺',name:'Австралія'},    away:{code:'EGP',flag:'🇪🇬',name:'Єгипет'},       kickoff:'2026-07-01T18:00:00Z' },
-  { id:'r32_15', side:'right', home:{code:'SUI',flag:'🇨🇭',name:'Швейцарія'},    away:{code:'ALG',flag:'🇩🇿',name:'Алжир'},        kickoff:'2026-07-02T15:00:00Z' },
-  { id:'r32_16', side:'right', home:{code:'COL',flag:'🇨🇴',name:'Колумбія'},     away:{code:'GHA',flag:'🇬🇭',name:'Гана'},         kickoff:'2026-07-02T18:00:00Z' },
+  { id:'r32_09', side:'right', home:{code:'BRA',flag:'🇧🇷',name:'Бразилія'},     away:{code:'JAP',flag:'🇯🇵',name:'Японія'},       kickoff:'2026-06-29T17:00:00Z' },
+  { id:'r32_10', side:'right', home:{code:'CIV',flag:'🇨🇮',name:"Кот-д'Івуар"}, away:{code:'NOR',flag:'🇳🇴',name:'Норвегія'},     kickoff:'2026-06-30T17:00:00Z' },
+  { id:'r32_11', side:'right', home:{code:'MEX',flag:'🇲🇽',name:'Мексика'},      away:{code:'ECU',flag:'🇪🇨',name:'Еквадор'},      kickoff:'2026-07-01T01:00:00Z' },
+  { id:'r32_12', side:'right', home:{code:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Англія'},       away:{code:'DRC',flag:'🇨🇩',name:'ДР Конго'},      kickoff:'2026-07-01T16:00:00Z' },
+  { id:'r32_14', side:'right', home:{code:'AUS',flag:'🇦🇺',name:'Австралія'},    away:{code:'EGP',flag:'🇪🇬',name:'Єгипет'},       kickoff:'2026-07-03T18:00:00Z' },
+  { id:'r32_13', side:'right', home:{code:'ARG',flag:'🇦🇷',name:'Аргентина'},    away:{code:'CPV',flag:'🇨🇻',name:'Кабо-Верде'},   kickoff:'2026-07-03T22:00:00Z' },
+  { id:'r32_15', side:'right', home:{code:'SUI',flag:'🇨🇭',name:'Швейцарія'},    away:{code:'ALG',flag:'🇩🇿',name:'Алжир'},        kickoff:'2026-07-03T03:00:00Z' },
+  { id:'r32_16', side:'right', home:{code:'COL',flag:'🇨🇴',name:'Колумбія'},     away:{code:'GHA',flag:'🇬🇭',name:'Гана'},         kickoff:'2026-07-04T01:30:00Z' },
 ];
 
 /* ── STATE ── */
