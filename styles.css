@@ -306,8 +306,10 @@ body {
 }
 
 .card-header img {
-  width: clamp(60px, 7vw, 90px);
-  height: clamp(60px, 7vw, 90px);
+  max-height: 110px;
+  max-width: 80%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
 }
