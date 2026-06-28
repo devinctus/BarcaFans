@@ -24,9 +24,22 @@
 
   <!-- WC HERO -->
   <section class="wc-hero">
-    <img class="wc-hero-logo" src="https://upload.wikimedia.org/wikipedia/commons/1/17/2026_FIFA_World_Cup_emblem.svg" width="110" height="110" alt="FIFA World Cup 2026" />
     <h1>Чемпіонат Світу 2026</h1>
-    <p>Round of 32 · Плей-офф</p>
+    <p id="heroRoundLabel">Round of 32 · Плей-офф</p>
+    <div class="hero-leaderboard">
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Учасник</th>
+            <th style="text-align:right">Бали</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="3" class="empty-lb">Поки немає завершених матчів 🕐</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <div class="stripe-bar"></div>
@@ -80,24 +93,6 @@
         <div class="rule-desc">Ставка на результат перших двох таймів — додатковий час та серія пенальті не враховуються</div>
       </div>
     </div>
-  </section>
-
-  <!-- LEADERBOARD -->
-  <div class="stripe-bar"></div>
-  <section class="leaderboard-section">
-    <h2>📊 Таблиця лідерів</h2>
-    <table class="leaderboard-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Учасник</th>
-          <th style="text-align:right">Бали</th>
-        </tr>
-      </thead>
-      <tbody id="leaderboardBody">
-        <tr><td colspan="3" class="empty-lb">Поки немає завершених матчів 🕐</td></tr>
-      </tbody>
-    </table>
   </section>
 
   <!-- ADMIN PANEL -->
