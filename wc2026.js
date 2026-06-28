@@ -447,8 +447,19 @@ function adminMatchRowHtml(m) {
                 onclick="adminSave('${m.id}',this)">
           ${res.status === 'finished' ? '✔ Збережено' : 'Зберегти'}
         </button>
+        ${res.status === 'finished' ? `<button class="btn-reset-result" onclick="resetResult('${m.id}')">↩ Скинути</button>` : ''}
       </div>
     </div>`;
+}
+
+async function resetResult(matchId) {
+  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+  if (!confirm('Скинути результат матчу? Всі нараховані бали за цей матч будуть анульовані.')) return;
+  await db.collection('results').doc(matchId).delete();
+  delete results[matchId];
+  renderAdmin();
+  renderAll();
+  rebuildLeaderboard();
 }
 
 async function adminSave(matchId, btn) {

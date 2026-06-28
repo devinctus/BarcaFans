@@ -258,7 +258,8 @@
   margin: 0 auto;
   text-align: center;
 }
-.rules-section h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; }
+.rules-section h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+.rules-note { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1.2rem; letter-spacing: 0.02em; }
 .rules-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -621,6 +622,19 @@
   cursor: pointer;
 }
 .btn-save-result.saved { background: linear-gradient(135deg, #16a34a, #15803d); }
+
+.btn-reset-result {
+  background: transparent;
+  border: 1px solid rgba(248,113,113,0.4);
+  color: #f87171;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-reset-result:hover { background: rgba(248,113,113,0.12); border-color: #f87171; }
 
 /* ── ROUND TABS BAR ── */
 .round-tabs-bar {
