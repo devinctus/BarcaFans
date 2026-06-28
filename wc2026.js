@@ -473,6 +473,18 @@ async function resetResult(matchId) {
   rebuildLeaderboard();
 }
 
+async function deleteAdminPredictions() {
+  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+  if (!confirm('Видалити всі прогнози адміна? Цю дію не можна скасувати.')) return;
+  const snap = await db.collection('predictions').where('email', '==', ADMIN_EMAIL).get();
+  if (snap.empty) { alert('Прогнозів адміна не знайдено.'); return; }
+  const batch = db.batch();
+  snap.forEach(d => batch.delete(d.ref));
+  await batch.commit();
+  snap.forEach(d => { delete predictions[d.data().matchId]; });
+  renderAll();
+}
+
 async function adminSave(matchId, btn) {
   const h = parseInt(document.getElementById(`a_h_${matchId}`).value);
   const a = parseInt(document.getElementById(`a_a_${matchId}`).value);
@@ -648,7 +660,7 @@ async function loadMatchBetters(matchId) {
         const name = p.email === ADMIN_EMAIL ? 'Admin' : p.displayName;
         return `<div class="modal-betters-name">👤 ${name}</div>`;
       }).join('');
-      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Ставка прийнята від:</div>${rows}</div>`;
+      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Прогноз прийнятий від:</div>${rows}</div>`;
     }
   } catch(e) {}
 }
