@@ -343,7 +343,7 @@ function matchCardHtml(m) {
   let advHtml = '';
   if (res?.advancedTeam) {
     const w = getTeamInfo(m, res.advancedTeam);
-    if (!w?.tbd) advHtml = `<span class="match-adv">${w.flag} ${w.code} → Пройшла далі збірна</span>`;
+    if (!w?.tbd) advHtml = `<span class="match-adv">Пройшла далі збірна → ${w.flag} ${w.code}</span>`;
   }
 
   const isFinalist = m.id === 'final_104' && res?.advancedTeam;
@@ -529,7 +529,7 @@ function openModal(matchId) {
   const ptsHtml = pts === null ? '' :
     pts === 3 ? '<div class="pts-msg gold">🎯 Точний рахунок! +3 бали</div>' :
     pts === 1 ? '<div class="pts-msg green">✅ Правильний напрямок! +1 бал</div>' :
-                '<div class="pts-msg red">❌ Не вгадав — +0 балів</div>';
+                '<div class="pts-msg red">😔 Не пощастило! +0 балів</div>';
 
   const headerHtml = `
     <div class="modal-header">
@@ -564,7 +564,7 @@ function openModal(matchId) {
   } else if (status === 'finished') {
     const advTeam = res?.advancedTeam ? getTeamInfo(m, res.advancedTeam) : null;
     const advHtml = advTeam && !advTeam.tbd
-      ? `<div class="modal-adv">→ Пройшла далі збірна: ${advTeam.flag} ${advTeam.name}</div>` : '';
+      ? `<div class="modal-adv">Пройшла далі збірна → ${advTeam.flag} ${advTeam.name}</div>` : '';
     bodyHtml = `
       <div class="modal-result">
         <div class="result-score">Результат (90 хв): <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
