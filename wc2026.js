@@ -525,7 +525,7 @@ function openModal(matchId) {
   } else {
     const currentBetHtml = pred ? `
       <div class="modal-current-bet">
-        <div class="modal-current-bet-label">Ваша ставка</div>
+        <div class="modal-current-bet-label">✓ Ваша ставка</div>
         <div class="modal-current-bet-score">${pred.homeGoals} : ${pred.awayGoals}</div>
       </div>` : '';
     bodyHtml = `
@@ -551,8 +551,31 @@ function openModal(matchId) {
       </form>`;
   }
 
-  document.getElementById('modalContent').innerHTML = headerHtml + bodyHtml;
+  const bettersSection = isTbd ? '' :
+    `<div id="modalBetters" class="modal-betters"><span class="modal-betters-loading">…</span></div>`;
+
+  document.getElementById('modalContent').innerHTML = headerHtml + bodyHtml + bettersSection;
   document.getElementById('modal').classList.add('open');
+  if (!isTbd) loadMatchBetters(matchId);
+}
+
+async function loadMatchBetters(matchId) {
+  try {
+    const snap = await db.collection('predictions').where('matchId', '==', matchId).get();
+    const names = [];
+    snap.forEach(d => {
+      const p = d.data();
+      if (!p.displayName) return;
+      names.push(p.email === ADMIN_EMAIL ? 'Admin' : p.displayName);
+    });
+    const el = document.getElementById('modalBetters');
+    if (!el) return;
+    if (!names.length) {
+      el.innerHTML = `<p class="modal-betters-empty">Ніхто ще не зробив свою ставку на гру</p>`;
+    } else {
+      el.innerHTML = `<p class="modal-betters-list"><span class="modal-betters-label">Ставка прийнята від:</span> ${names.join(', ')}</p>`;
+    }
+  } catch(e) {}
 }
 
 function closeModal() {
