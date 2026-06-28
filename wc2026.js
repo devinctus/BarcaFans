@@ -612,7 +612,7 @@ function openModal(matchId) {
     bodyHtml = `
       <div class="modal-closed">
         <div class="closed-icon">${status === 'live' ? '🔴' : '🔒'}</div>
-        <p>${status === 'live' ? 'Матч вже йде — прогнози закриті' : 'Прогнози закриті — до початку менше 60 хвилин'}</p>
+        <p>${status === 'live' ? 'Матч вже почався — прогнози закриті' : 'Прогнози закриті — матч уже розпочався'}</p>
         ${pred
           ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
           : `<div class="pred-score grey">Ти не встиг зробити прогноз</div>`}
@@ -642,7 +642,7 @@ function openModal(matchId) {
         <button type="submit" class="btn-submit">
           ${pred ? '🔄 Змінити прогноз' : '⚽ Зробити прогноз'}
         </button>
-        <p class="deadline-note">🔒 Прогнози закриваються за 1 годину до початку матчу</p>
+        <p class="deadline-note">🔒 Прогноз можна поставити до початку матчу</p>
       </form>`;
   }
 
