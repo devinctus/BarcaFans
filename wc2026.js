@@ -3,34 +3,151 @@ const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
-/* ── MATCHES DATA ── */
+/* ── ROUND LABELS ── */
+const ROUND_LABELS = {
+  r32:   'Round of 32',
+  r16:   'Round of 16',
+  qf:    'Чвертьфінал',
+  sf:    'Півфінал',
+  final: 'Фінал'
+};
+
+/* ── ALL MATCHES ── */
 const MATCHES = [
-  // LEFT
-  { id:'r32_01', side:'left',  home:{code:'GER',flag:'🇩🇪',name:'Німеччина'},   away:{code:'PAR',flag:'🇵🇾',name:'Парагвай'},     kickoff:'2026-06-29T15:00:00Z' },
-  { id:'r32_02', side:'left',  home:{code:'FRA',flag:'🇫🇷',name:'Франція'},      away:{code:'SWE',flag:'🇸🇪',name:'Швеція'},       kickoff:'2026-06-29T18:00:00Z' },
-  { id:'r32_03', side:'left',  home:{code:'RSA',flag:'🇿🇦',name:'ПАР'},          away:{code:'CAN',flag:'🇨🇦',name:'Канада'},       kickoff:'2026-06-30T15:00:00Z' },
-  { id:'r32_04', side:'left',  home:{code:'NED',flag:'🇳🇱',name:'Нідерланди'},   away:{code:'MOR',flag:'🇲🇦',name:'Марокко'},      kickoff:'2026-06-30T18:00:00Z' },
-  { id:'r32_05', side:'left',  home:{code:'POR',flag:'🇵🇹',name:'Португалія'},   away:{code:'CRO',flag:'🇭🇷',name:'Хорватія'},     kickoff:'2026-07-01T15:00:00Z' },
-  { id:'r32_06', side:'left',  home:{code:'SPA',flag:'🇪🇸',name:'Іспанія'},      away:{code:'AUT',flag:'🇦🇹',name:'Австрія'},      kickoff:'2026-07-01T18:00:00Z' },
-  { id:'r32_07', side:'left',  home:{code:'USA',flag:'🇺🇸',name:'США'},          away:{code:'BIH',flag:'🇧🇦',name:'Боснія'},       kickoff:'2026-07-02T15:00:00Z' },
-  { id:'r32_08', side:'left',  home:{code:'BEL',flag:'🇧🇪',name:'Бельгія'},      away:{code:'SEN',flag:'🇸🇳',name:'Сенегал'},      kickoff:'2026-07-02T18:00:00Z' },
-  // RIGHT
-  { id:'r32_09', side:'right', home:{code:'BRA',flag:'🇧🇷',name:'Бразилія'},     away:{code:'JAP',flag:'🇯🇵',name:'Японія'},       kickoff:'2026-06-29T15:00:00Z' },
-  { id:'r32_10', side:'right', home:{code:'CIV',flag:'🇨🇮',name:"Кот-д'Івуар"}, away:{code:'NOR',flag:'🇳🇴',name:'Норвегія'},     kickoff:'2026-06-29T18:00:00Z' },
-  { id:'r32_11', side:'right', home:{code:'MEX',flag:'🇲🇽',name:'Мексика'},      away:{code:'ECU',flag:'🇪🇨',name:'Еквадор'},      kickoff:'2026-06-30T15:00:00Z' },
-  { id:'r32_12', side:'right', home:{code:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Англія'},       away:{code:'DRC',flag:'🇨🇩',name:'ДР Конго'},      kickoff:'2026-06-30T18:00:00Z' },
-  { id:'r32_13', side:'right', home:{code:'ARG',flag:'🇦🇷',name:'Аргентина'},    away:{code:'CPV',flag:'🇨🇻',name:'Кабо-Верде'},   kickoff:'2026-07-01T15:00:00Z' },
-  { id:'r32_14', side:'right', home:{code:'AUS',flag:'🇦🇺',name:'Австралія'},    away:{code:'EGP',flag:'🇪🇬',name:'Єгипет'},       kickoff:'2026-07-01T18:00:00Z' },
-  { id:'r32_15', side:'right', home:{code:'SUI',flag:'🇨🇭',name:'Швейцарія'},    away:{code:'ALG',flag:'🇩🇿',name:'Алжир'},        kickoff:'2026-07-02T15:00:00Z' },
-  { id:'r32_16', side:'right', home:{code:'COL',flag:'🇨🇴',name:'Колумбія'},     away:{code:'GHA',flag:'🇬🇭',name:'Гана'},         kickoff:'2026-07-02T18:00:00Z' },
+  // ── ROUND OF 32 — LEFT (порядок як на офіційному брекеті, зверху вниз) ──
+  { id:'r32_01', round:'r32', side:'left',  kickoff:'2026-06-29T20:30:00Z',
+    home:{code:'GER',flag:'🇩🇪',name:'Німеччина'},      away:{code:'PAR',flag:'🇵🇾',name:'Парагвай'} },
+  { id:'r32_02', round:'r32', side:'left',  kickoff:'2026-06-30T21:00:00Z',
+    home:{code:'FRA',flag:'🇫🇷',name:'Франція'},        away:{code:'SWE',flag:'🇸🇪',name:'Швеція'} },
+  { id:'r32_03', round:'r32', side:'left',  kickoff:'2026-06-28T19:00:00Z',
+    home:{code:'RSA',flag:'🇿🇦',name:'ПАР'},           away:{code:'CAN',flag:'🇨🇦',name:'Канада'} },
+  { id:'r32_04', round:'r32', side:'left',  kickoff:'2026-06-30T01:00:00Z',
+    home:{code:'NED',flag:'🇳🇱',name:'Нідерланди'},     away:{code:'MOR',flag:'🇲🇦',name:'Марокко'} },
+  { id:'r32_05', round:'r32', side:'left',  kickoff:'2026-07-02T23:00:00Z',
+    home:{code:'POR',flag:'🇵🇹',name:'Португалія'},     away:{code:'CRO',flag:'🇭🇷',name:'Хорватія'} },
+  { id:'r32_06', round:'r32', side:'left',  kickoff:'2026-07-02T19:00:00Z',
+    home:{code:'SPA',flag:'🇪🇸',name:'Іспанія'},        away:{code:'AUT',flag:'🇦🇹',name:'Австрія'} },
+  { id:'r32_07', round:'r32', side:'left',  kickoff:'2026-07-02T00:00:00Z',
+    home:{code:'USA',flag:'🇺🇸',name:'США'},             away:{code:'BIH',flag:'🇧🇦',name:'Боснія'} },
+  { id:'r32_08', round:'r32', side:'left',  kickoff:'2026-07-01T20:00:00Z',
+    home:{code:'BEL',flag:'🇧🇪',name:'Бельгія'},        away:{code:'SEN',flag:'🇸🇳',name:'Сенегал'} },
+
+  // ── ROUND OF 32 — RIGHT (порядок як на офіційному брекеті, зверху вниз) ──
+  { id:'r32_09', round:'r32', side:'right', kickoff:'2026-06-29T17:00:00Z',
+    home:{code:'BRA',flag:'🇧🇷',name:'Бразилія'},       away:{code:'JAP',flag:'🇯🇵',name:'Японія'} },
+  { id:'r32_10', round:'r32', side:'right', kickoff:'2026-06-30T17:00:00Z',
+    home:{code:'CIV',flag:'🇨🇮',name:"Кот-д'Івуар"},   away:{code:'NOR',flag:'🇳🇴',name:'Норвегія'} },
+  { id:'r32_11', round:'r32', side:'right', kickoff:'2026-07-01T01:00:00Z',
+    home:{code:'MEX',flag:'🇲🇽',name:'Мексика'},        away:{code:'ECU',flag:'🇪🇨',name:'Еквадор'} },
+  { id:'r32_12', round:'r32', side:'right', kickoff:'2026-07-01T16:00:00Z',
+    home:{code:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Англія'},         away:{code:'DRC',flag:'🇨🇩',name:'ДР Конго'} },
+  { id:'r32_13', round:'r32', side:'right', kickoff:'2026-07-03T22:00:00Z',
+    home:{code:'ARG',flag:'🇦🇷',name:'Аргентина'},      away:{code:'CPV',flag:'🇨🇻',name:'Кабо-Верде'} },
+  { id:'r32_14', round:'r32', side:'right', kickoff:'2026-07-03T18:00:00Z',
+    home:{code:'AUS',flag:'🇦🇺',name:'Австралія'},      away:{code:'EGP',flag:'🇪🇬',name:'Єгипет'} },
+  { id:'r32_15', round:'r32', side:'right', kickoff:'2026-07-03T03:00:00Z',
+    home:{code:'SUI',flag:'🇨🇭',name:'Швейцарія'},      away:{code:'ALG',flag:'🇩🇿',name:'Алжир'} },
+  { id:'r32_16', round:'r32', side:'right', kickoff:'2026-07-04T01:30:00Z',
+    home:{code:'COL',flag:'🇨🇴',name:'Колумбія'},       away:{code:'GHA',flag:'🇬🇭',name:'Гана'} },
+
+  // ── ROUND OF 16 — LEFT ──
+  // M90: W(GER/PAR) vs W(FRA/SWE) — Houston, Jul 4 17:00 UTC
+  { id:'r16_90', round:'r16', side:'left',  kickoff:'2026-07-04T17:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_01'}, awayFrom:{type:'winner',matchId:'r32_02'} },
+  // M91: W(RSA/CAN) vs W(NED/MOR) — East Rutherford, Jul 5 20:00 UTC
+  { id:'r16_91', round:'r16', side:'left',  kickoff:'2026-07-05T20:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_03'}, awayFrom:{type:'winner',matchId:'r32_04'} },
+  // M93: W(POR/CRO) vs W(SPA/AUT) — Arlington, Jul 6 19:00 UTC
+  { id:'r16_93', round:'r16', side:'left',  kickoff:'2026-07-06T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_05'}, awayFrom:{type:'winner',matchId:'r32_06'} },
+  // M94: W(USA/BIH) vs W(BEL/SEN) — Seattle, Jul 7 00:00 UTC
+  { id:'r16_94', round:'r16', side:'left',  kickoff:'2026-07-07T00:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_07'}, awayFrom:{type:'winner',matchId:'r32_08'} },
+
+  // ── ROUND OF 16 — RIGHT ──
+  // M89: W(BRA/JAP) vs W(CIV/NOR) — Philadelphia, Jul 4 21:00 UTC
+  { id:'r16_89', round:'r16', side:'right', kickoff:'2026-07-04T21:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_09'}, awayFrom:{type:'winner',matchId:'r32_10'} },
+  // M92: W(MEX/ECU) vs W(ENG/DRC) — Mexico City, Jul 6 00:00 UTC
+  { id:'r16_92', round:'r16', side:'right', kickoff:'2026-07-06T00:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_11'}, awayFrom:{type:'winner',matchId:'r32_12'} },
+  // M95: W(ARG/CPV) vs W(AUS/EGP) — Atlanta, Jul 7 16:00 UTC
+  { id:'r16_95', round:'r16', side:'right', kickoff:'2026-07-07T16:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_13'}, awayFrom:{type:'winner',matchId:'r32_14'} },
+  // M96: W(SUI/ALG) vs W(COL/GHA) — Vancouver, Jul 7 20:00 UTC
+  { id:'r16_96', round:'r16', side:'right', kickoff:'2026-07-07T20:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_15'}, awayFrom:{type:'winner',matchId:'r32_16'} },
+
+  // ── QUARTER-FINALS — LEFT ──
+  // QF97: W(r16_90) vs W(r16_91) — Foxborough, Jul 9 20:00 UTC
+  { id:'qf_97',  round:'qf', side:'left',  kickoff:'2026-07-09T20:00:00Z',
+    homeFrom:{type:'winner',matchId:'r16_90'}, awayFrom:{type:'winner',matchId:'r16_91'} },
+  // QF99: W(r16_93) vs W(r16_94) — Miami, Jul 11 21:00 UTC
+  { id:'qf_99',  round:'qf', side:'left',  kickoff:'2026-07-11T21:00:00Z',
+    homeFrom:{type:'winner',matchId:'r16_93'}, awayFrom:{type:'winner',matchId:'r16_94'} },
+
+  // ── QUARTER-FINALS — RIGHT ──
+  // QF98: W(r16_89) vs W(r16_92) — Inglewood, Jul 10 19:00 UTC
+  { id:'qf_98',  round:'qf', side:'right', kickoff:'2026-07-10T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'r16_89'}, awayFrom:{type:'winner',matchId:'r16_92'} },
+  // QF100: W(r16_95) vs W(r16_96) — Kansas City, Jul 12 01:00 UTC
+  { id:'qf_100', round:'qf', side:'right', kickoff:'2026-07-12T01:00:00Z',
+    homeFrom:{type:'winner',matchId:'r16_95'}, awayFrom:{type:'winner',matchId:'r16_96'} },
+
+  // ── SEMI-FINALS ──
+  // SF101: W(qf_97) vs W(qf_99) — Arlington, Jul 14 19:00 UTC
+  { id:'sf_101', round:'sf', side:'left',  kickoff:'2026-07-14T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'qf_97'},  awayFrom:{type:'winner',matchId:'qf_99'} },
+  // SF102: W(qf_98) vs W(qf_100) — Atlanta, Jul 15 19:00 UTC
+  { id:'sf_102', round:'sf', side:'right', kickoff:'2026-07-15T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'qf_98'},  awayFrom:{type:'winner',matchId:'qf_100'} },
+
+  // ── ФІНАЛ ──
+  // 3rd place: L(sf_101) vs L(sf_102) — Miami, Jul 18 21:00 UTC
+  { id:'m3rd_103', round:'final', side:'left',  kickoff:'2026-07-18T21:00:00Z',
+    homeFrom:{type:'loser',matchId:'sf_101'},   awayFrom:{type:'loser',matchId:'sf_102'} },
+  // Final: W(sf_101) vs W(sf_102) — MetLife, Jul 19 19:00 UTC
+  { id:'final_104', round:'final', side:'right', kickoff:'2026-07-19T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'sf_101'},  awayFrom:{type:'winner',matchId:'sf_102'} },
 ];
 
 /* ── STATE ── */
-let currentUser      = null;
-let predictions      = {};   // matchId → prediction doc
-let results          = {};   // matchId → result doc
-let leaderboardData  = [];
-let predUnsubscribe  = null;
+let currentUser     = null;
+let predictions     = {};
+let results         = {};
+let leaderboardData = [];
+let predUnsubscribe = null;
+let activeRound     = 'r32';
+
+/* ── HELPERS ── */
+function findMatch(id) {
+  return MATCHES.find(m => m.id === id);
+}
+
+function getTeamInfo(m, side) {
+  const direct = side === 'home' ? m.home : m.away;
+  if (direct) return direct;
+  const fromDef = side === 'home' ? m.homeFrom : m.awayFrom;
+  return resolveTeam(fromDef);
+}
+
+function resolveTeam(from) {
+  const src = findMatch(from.matchId);
+  if (!src) return { code: '?', flag: '', name: '?', tbd: true };
+  const res = results[from.matchId];
+  if (!res?.advancedTeam) {
+    const h = getTeamInfo(src, 'home');
+    const a = getTeamInfo(src, 'away');
+    const hc = h?.tbd ? '?' : h?.code;
+    const ac = a?.tbd ? '?' : a?.code;
+    const pre = from.type === 'winner' ? 'В.' : 'П.';
+    return { code: `${hc}/${ac}`, flag: '', name: `${pre} ${hc}/${ac}`, tbd: true };
+  }
+  const side = from.type === 'winner'
+    ? res.advancedTeam
+    : (res.advancedTeam === 'home' ? 'away' : 'home');
+  return getTeamInfo(src, side);
+}
 
 /* ── SCORING ── */
 function calcPoints(pH, pA, rH, rA) {
@@ -39,16 +156,16 @@ function calcPoints(pH, pA, rH, rA) {
   return 0;
 }
 
-/* ── HELPERS ── */
+/* ── STATUS ── */
 function getStatus(match) {
   const now        = Date.now();
   const kickoff    = new Date(match.kickoff).getTime();
-  const predCutoff = kickoff - 60 * 60000;  // закрити ставки за 60 хв до початку
+  const predCutoff = kickoff - 60 * 60000;
   const endTime    = kickoff + 150 * 60000;
   const res = results[match.id];
-  if (res && res.status === 'finished')  return 'finished';
-  if (now >= kickoff && now < endTime)   return 'live';
-  if (now >= predCutoff)                 return 'closed';
+  if (res && res.status === 'finished') return 'finished';
+  if (now >= kickoff && now < endTime)  return 'live';
+  if (now >= predCutoff)                return 'closed';
   return 'upcoming';
 }
 
@@ -61,17 +178,13 @@ function fmtDate(iso) {
 }
 
 /* ── AUTH ── */
-function login() {
-  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error);
-}
+function login()  { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
 function logout() { auth.signOut(); }
 
 async function saveUserProfile(user) {
   await db.collection('users').doc(user.uid).set({
-    uid: user.uid,
-    displayName: user.displayName,
-    email: user.email,
-    photoURL: user.photoURL,
+    uid: user.uid, displayName: user.displayName,
+    email: user.email, photoURL: user.photoURL,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
   }, { merge: true });
 }
@@ -79,7 +192,6 @@ async function saveUserProfile(user) {
 auth.onAuthStateChanged(async user => {
   currentUser = user;
   if (predUnsubscribe) { predUnsubscribe(); predUnsubscribe = null; }
-
   if (user) {
     await saveUserProfile(user);
     predUnsubscribe = db.collection('predictions')
@@ -92,7 +204,6 @@ auth.onAuthStateChanged(async user => {
     predictions = {};
     renderAll();
   }
-
   updateNavbar(user);
   toggleAdmin(user);
 });
@@ -108,7 +219,7 @@ db.collection('results').onSnapshot(snap => {
 /* ── LEADERBOARD ── */
 function rebuildLeaderboard() {
   db.collection('predictions').get().then(snap => {
-    const pts = {}, names = {}, photos = {};
+    const pts = {}, names = {}, photos = {}, emails = {};
     snap.forEach(d => {
       const p = d.data();
       const r = results[p.matchId];
@@ -117,10 +228,11 @@ function rebuildLeaderboard() {
       pts[p.userId]    = (pts[p.userId]    || 0) + score;
       names[p.userId]  = p.displayName;
       photos[p.userId] = p.photoURL;
+      if (p.email) emails[p.userId] = p.email;
     });
     leaderboardData = Object.entries(pts)
       .sort((a, b) => b[1] - a[1])
-      .map(([uid, p]) => ({ uid, pts: p, name: names[uid], photo: photos[uid] }));
+      .map(([uid, p]) => ({ uid, pts: p, name: names[uid], photo: photos[uid], email: emails[uid] || null }));
     renderLeaderboard();
   });
 }
@@ -133,16 +245,25 @@ async function savePrediction(matchId, homeGoals, awayGoals) {
     homeGoals, awayGoals,
     displayName: currentUser.displayName,
     photoURL: currentUser.photoURL,
+    email: currentUser.email,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
 }
 
-/* ── ADMIN: SAVE RESULT ── */
+/* ── RESULTS (ADMIN) ── */
 async function saveResult(matchId, homeGoals, awayGoals) {
   await db.collection('results').doc(matchId).set({
     homeGoals, awayGoals, status: 'finished',
     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  }, { merge: true });
+}
+
+async function setAdvancer(matchId, side) {
+  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+  await db.collection('results').doc(matchId).set({
+    advancedTeam: side,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
 }
 
 /* ── RENDER ALL ── */
@@ -152,18 +273,37 @@ function renderAll() {
   renderAdmin();
 }
 
+/* ── ROUND TABS ── */
+function switchRound(round) {
+  activeRound = round;
+  document.querySelectorAll('.round-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.round === round);
+  });
+  renderBracket();
+}
+
 /* ── BRACKET ── */
 function renderBracket() {
-  const left  = MATCHES.filter(m => m.side === 'left');
-  const right = MATCHES.filter(m => m.side === 'right');
+  const roundMatches = MATCHES.filter(m => m.round === activeRound);
+  const left  = roundMatches.filter(m => m.side === 'left');
+  const right = roundMatches.filter(m => m.side === 'right');
   document.getElementById('leftBracket').innerHTML  = left.map(matchCardHtml).join('');
   document.getElementById('rightBracket').innerHTML = right.map(matchCardHtml).join('');
+
+  const roundLabel = document.getElementById('bracketRoundLabel');
+  if (roundLabel) roundLabel.textContent = ROUND_LABELS[activeRound].toUpperCase();
+
+  const heroLabel = document.getElementById('heroRoundLabel');
+  if (heroLabel) heroLabel.textContent = ROUND_LABELS[activeRound] + ' · Плей-офф';
 }
 
 function matchCardHtml(m) {
-  const status = getStatus(m);
-  const pred   = predictions[m.id];
-  const res    = results[m.id];
+  const homeTeam = getTeamInfo(m, 'home');
+  const awayTeam = getTeamInfo(m, 'away');
+  const isTbd    = !!(homeTeam?.tbd || awayTeam?.tbd);
+  const status   = getStatus(m);
+  const pred     = predictions[m.id];
+  const res      = results[m.id];
 
   let pts = null;
   if (pred && res && res.status === 'finished')
@@ -172,7 +312,7 @@ function matchCardHtml(m) {
   const badgeMap = {
     upcoming: `<span class="badge badge-upcoming">🕐 ${fmtDate(m.kickoff)} (Київ)</span>`,
     live:     `<span class="badge badge-live">🔴 LIVE</span>`,
-    closed:   `<span class="badge badge-closed">🔒 Закрито · ${fmtDate(m.kickoff)}</span>`,
+    closed:   `<span class="badge badge-closed">🔒 ${fmtDate(m.kickoff)}</span>`,
     finished: `<span class="badge badge-finished">✅ Завершено</span>`
   };
 
@@ -180,25 +320,44 @@ function matchCardHtml(m) {
     ? `<span class="match-result">${res.homeGoals}:${res.awayGoals}</span>`
     : `<span class="vs">vs</span>`;
 
-  const ptsLabel = pts === null ? '' : pts === 3 ? ' 🎯+3' : pts === 1 ? ' ✅+1' : ' ❌+0';
-  const predHtml = pred
-    ? `<div class="match-pred">Твій прогноз: ${pred.homeGoals}:${pred.awayGoals}${ptsLabel}</div>`
+  const ptsLabel  = pts === null ? '' : pts === 3 ? ' 🎯+3' : pts === 1 ? ' ✅+1' : ' ❌+0';
+  const predHtml  = (pred && !isTbd)
+    ? `<div class="match-pred">Твій прогноз: ${pred.homeGoals}:${pred.awayGoals}${ptsLabel}</div>` : '';
+  const ctaHtml = (status === 'upcoming' && !isTbd)
+    ? pred
+      ? `<div class="match-cta match-cta-done">✓ Ставка прийнята</div>`
+      : `<div class="match-cta">+ Зробити прогноз</div>`
     : '';
 
-  const ctaHtml = (status === 'upcoming' && !pred)
-    ? `<div class="match-cta">+ Зробити прогноз</div>` : '';
+  const metaRowHtml = `<div class="match-meta-row">${badgeMap[status]}${predHtml}</div>`;
+
+  let advHtml = '';
+  if (res?.advancedTeam) {
+    const w = getTeamInfo(m, res.advancedTeam);
+    if (!w?.tbd) advHtml = `<div class="match-adv">${w.flag} ${w.code} → далі</div>`;
+  }
+
+  const isFinalist = m.id === 'final_104' && res?.advancedTeam;
+  if (isFinalist) {
+    const champ = getTeamInfo(m, res.advancedTeam);
+    if (!champ?.tbd) advHtml = `<div class="match-adv champ">🏆 ${champ.flag} ${champ.name} — Чемпіон!</div>`;
+  }
+  const is3rd = m.id === 'm3rd_103' && res?.advancedTeam;
+  if (is3rd) {
+    const third = getTeamInfo(m, res.advancedTeam);
+    if (!third?.tbd) advHtml = `<div class="match-adv third">🥉 ${third.flag} ${third.name}</div>`;
+  }
 
   return `
-    <div class="match-card ${status}" onclick="openModal('${m.id}')">
+    <div class="match-card ${status}${isTbd ? ' tbd' : ''}" onclick="openModal('${m.id}')">
       <div class="match-teams">
-        <span class="team home">${m.home.flag} ${m.home.code}</span>
+        <span class="team home">${homeTeam.flag} ${homeTeam.code}</span>
         ${scoreHtml}
-        <span class="team away">${m.away.code} ${m.away.flag}</span>
+        <span class="team away">${awayTeam.code} ${awayTeam.flag}</span>
       </div>
       <div class="match-meta">
-        ${badgeMap[status]}
-        ${predHtml}
-        ${ctaHtml}
+        ${metaRowHtml}
+        ${ctaHtml}${advHtml}
       </div>
     </div>`;
 }
@@ -207,19 +366,34 @@ function matchCardHtml(m) {
 function renderLeaderboard() {
   const el = document.getElementById('leaderboardBody');
   if (!el) return;
-  if (!leaderboardData.length) {
-    el.innerHTML = '<tr><td colspan="3" class="empty-lb">Поки немає завершених матчів 🕐</td></tr>';
+  const isAdmin = currentUser?.email === ADMIN_EMAIL;
+  const displayData = isAdmin
+    ? leaderboardData
+    : leaderboardData.filter(e => e.email !== ADMIN_EMAIL);
+  if (!displayData.length) {
+    el.innerHTML = '<div class="lb-empty">Поки немає завершених матчів 🕐</div>';
     return;
   }
-  el.innerHTML = leaderboardData.map((e, i) => `
-    <tr class="${currentUser && e.uid === currentUser.uid ? 'my-row' : ''}">
-      <td class="rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</td>
-      <td class="player">
-        ${e.photo ? `<img src="${e.photo}" class="avatar" referrerpolicy="no-referrer" />` : ''}
-        ${e.name}
-      </td>
-      <td class="pts">${e.pts} <span>балів</span></td>
-    </tr>`).join('');
+  const medals = ['🥇', '🥈', '🥉'];
+  const tierClass = ['gold', 'silver', 'bronze'];
+  el.innerHTML = displayData.map((e, i) => {
+    const isAdminEntry = e.email === ADMIN_EMAIL;
+    const displayName  = isAdminEntry ? 'Admin' : e.name;
+    const initials     = displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const photoHtml    = (!isAdminEntry && e.photo)
+      ? `<img src="${e.photo}" class="lb-avatar" referrerpolicy="no-referrer" />`
+      : `<div class="lb-initials">${initials}</div>`;
+    const medal   = i < 3 ? medals[i] : String(i + 1);
+    const tier    = i < 3 ? tierClass[i] : 'normal';
+    const isMe    = currentUser && e.uid === currentUser.uid;
+    return `
+    <div class="lb-card ${tier}${isMe ? ' lb-me' : ''}">
+      <span class="lb-medal">${medal}</span>
+      ${photoHtml}
+      <span class="lb-name">${displayName}</span>
+      <span class="lb-pts">${e.pts} <span>балів</span></span>
+    </div>`;
+  }).join('');
 }
 
 /* ── ADMIN PANEL ── */
@@ -231,22 +405,50 @@ function toggleAdmin(user) {
 function renderAdmin() {
   if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
   const el = document.getElementById('adminMatches');
-  el.innerHTML = MATCHES.map(m => {
-    const res = results[m.id] || {};
+  const rounds = ['r32', 'r16', 'qf', 'sf', 'final'];
+  el.innerHTML = rounds.map(round => {
+    const ms = MATCHES.filter(m => m.round === round);
     return `
-      <div class="admin-match-row">
-        <span class="admin-match-label">${m.home.flag} ${m.home.code} vs ${m.away.code} ${m.away.flag}</span>
-        <div class="admin-score-inputs">
-          <input type="number" id="a_h_${m.id}" value="${res.homeGoals ?? ''}" min="0" max="20" placeholder="0" />
-          <span>:</span>
-          <input type="number" id="a_a_${m.id}" value="${res.awayGoals ?? ''}" min="0" max="20" placeholder="0" />
-        </div>
-        <button class="btn-save-result ${res.status === 'finished' ? 'saved' : ''}"
-          onclick="adminSave('${m.id}', this)">
-          ${res.status === 'finished' ? '✔ Збережено' : 'Зберегти'}
-        </button>
+      <div class="admin-round-group">
+        <h3 class="admin-round-label">${ROUND_LABELS[round]}</h3>
+        ${ms.map(adminMatchRowHtml).join('')}
       </div>`;
   }).join('');
+}
+
+function adminMatchRowHtml(m) {
+  const homeTeam  = getTeamInfo(m, 'home');
+  const awayTeam  = getTeamInfo(m, 'away');
+  const res       = results[m.id] || {};
+  const adv       = res.advancedTeam;
+  const homeLabel = homeTeam.tbd ? homeTeam.name : `${homeTeam.flag} ${homeTeam.code}`;
+  const awayLabel = awayTeam.tbd ? awayTeam.name : `${awayTeam.flag} ${awayTeam.code}`;
+
+  return `
+    <div class="admin-match-row">
+      <div class="admin-match-top">
+        <span class="admin-match-label">${homeLabel} vs ${awayLabel}</span>
+        <span class="admin-match-date">${fmtDate(m.kickoff)}</span>
+      </div>
+      <div class="admin-row-controls">
+        <div class="adv-toggle">
+          <button class="adv-btn${adv === 'home' ? ' adv-selected' : ''}"
+                  onclick="setAdvancer('${m.id}','home')">${homeLabel}</button>
+          <span class="adv-arrow">→</span>
+          <button class="adv-btn${adv === 'away' ? ' adv-selected' : ''}"
+                  onclick="setAdvancer('${m.id}','away')">${awayLabel}</button>
+        </div>
+        <div class="admin-score-inputs">
+          <input type="number" id="a_h_${m.id}" value="${res.homeGoals ?? ''}" min="0" max="19" placeholder="0" />
+          <span>:</span>
+          <input type="number" id="a_a_${m.id}" value="${res.awayGoals ?? ''}" min="0" max="19" placeholder="0" />
+        </div>
+        <button class="btn-save-result${res.status === 'finished' ? ' saved' : ''}"
+                onclick="adminSave('${m.id}',this)">
+          ${res.status === 'finished' ? '✔ Збережено' : 'Зберегти'}
+        </button>
+      </div>
+    </div>`;
 }
 
 async function adminSave(matchId, btn) {
@@ -278,10 +480,13 @@ function updateNavbar(user) {
 
 /* ── MODAL ── */
 function openModal(matchId) {
-  const m      = MATCHES.find(x => x.id === matchId);
-  const status = getStatus(m);
-  const pred   = predictions[matchId];
-  const res    = results[matchId];
+  const m        = findMatch(matchId);
+  const homeTeam = getTeamInfo(m, 'home');
+  const awayTeam = getTeamInfo(m, 'away');
+  const isTbd    = !!(homeTeam?.tbd || awayTeam?.tbd);
+  const status   = getStatus(m);
+  const pred     = predictions[matchId];
+  const res      = results[matchId];
 
   let pts = null;
   if (pred && res && res.status === 'finished')
@@ -289,21 +494,47 @@ function openModal(matchId) {
 
   const ptsHtml = pts === null ? '' :
     pts === 3 ? '<div class="pts-msg gold">🎯 Точний рахунок! +3 бали</div>' :
-    pts === 1 ? '<div class="pts-msg green">✅ Правильний напрямок! +1 бал</div>'  :
+    pts === 1 ? '<div class="pts-msg green">✅ Правильний напрямок! +1 бал</div>' :
                 '<div class="pts-msg red">❌ Не вгадав — +0 балів</div>';
+
+  const headerHtml = `
+    <div class="modal-header">
+      <div class="modal-teams">
+        <div class="modal-team${isTbd ? ' tbd' : ''}">
+          <span class="big-flag">${homeTeam.flag || '❓'}</span>
+          <span>${homeTeam.name}</span>
+        </div>
+        <div class="modal-vs">vs</div>
+        <div class="modal-team${isTbd ? ' tbd' : ''}">
+          <span class="big-flag">${awayTeam.flag || '❓'}</span>
+          <span>${awayTeam.name}</span>
+        </div>
+      </div>
+      <div class="modal-date">📅 ${fmtDate(m.kickoff)} (за Києвом)</div>
+    </div>`;
 
   let bodyHtml = '';
 
-  if (!currentUser) {
+  if (isTbd) {
+    bodyHtml = `
+      <div class="modal-tbd">
+        <p>Команди ще не визначені.</p>
+        <p>Повернись після завершення попереднього раунду!</p>
+      </div>`;
+  } else if (!currentUser) {
     bodyHtml = `
       <div class="modal-login-prompt">
         <p>Щоб зробити прогноз, увійдіть через Google</p>
         <button class="btn-login" onclick="login();closeModal()">Увійти через Google</button>
       </div>`;
   } else if (status === 'finished') {
+    const advTeam = res?.advancedTeam ? getTeamInfo(m, res.advancedTeam) : null;
+    const advHtml = advTeam && !advTeam.tbd
+      ? `<div class="modal-adv">→ Пройшов далі: ${advTeam.flag} ${advTeam.name}</div>` : '';
     bodyHtml = `
       <div class="modal-result">
-        <div class="result-score">Результат: <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
+        <div class="result-score">Результат (90 хв): <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
+        ${advHtml}
         ${pred
           ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
           : `<div class="pred-score grey">Ти не робив прогноз</div>`}
@@ -319,46 +550,60 @@ function openModal(matchId) {
           : `<div class="pred-score grey">Ти не встиг зробити прогноз</div>`}
       </div>`;
   } else {
+    const currentBetHtml = pred ? `
+      <div class="modal-current-bet">
+        <div class="modal-current-bet-label">✓ Ваша ставка</div>
+        <div class="modal-current-bet-score">${pred.homeGoals} : ${pred.awayGoals}</div>
+      </div>` : '';
     bodyHtml = `
+      ${currentBetHtml}
       <form onsubmit="submitPrediction(event,'${matchId}')">
         <div class="score-input">
           <div class="score-team">
-            <span>${m.home.flag}</span>
-            <span class="team-name">${m.home.name}</span>
-            <input type="number" id="homeInput" value="${pred ? pred.homeGoals : 1}" min="0" max="20" required />
+            <span>${homeTeam.flag}</span>
+            <span class="team-name">${homeTeam.name}</span>
+            <input type="number" id="homeInput" value="${pred ? pred.homeGoals : 0}" min="0" max="19" required />
           </div>
           <span class="score-colon">:</span>
           <div class="score-team">
-            <span>${m.away.flag}</span>
-            <span class="team-name">${m.away.name}</span>
-            <input type="number" id="awayInput" value="${pred ? pred.awayGoals : 0}" min="0" max="20" required />
+            <span>${awayTeam.flag}</span>
+            <span class="team-name">${awayTeam.name}</span>
+            <input type="number" id="awayInput" value="${pred ? pred.awayGoals : 0}" min="0" max="19" required />
           </div>
         </div>
         <button type="submit" class="btn-submit">
-          ${pred ? '🔄 Оновити прогноз' : '⚽ Зробити ставку'}
+          ${pred ? '🔄 Змінити ставку' : '⚽ Зробити ставку'}
         </button>
-        <p class="deadline-note">🔒 Ставки закриваються за 60 хвилин до початку матчу</p>
+        <p class="deadline-note">🔒 Ставки закриваються за 1 годину до початку матчу</p>
       </form>`;
   }
 
-  document.getElementById('modalContent').innerHTML = `
-    <div class="modal-header">
-      <div class="modal-teams">
-        <div class="modal-team">
-          <span class="big-flag">${m.home.flag}</span>
-          <span>${m.home.name}</span>
-        </div>
-        <div class="modal-vs">vs</div>
-        <div class="modal-team">
-          <span class="big-flag">${m.away.flag}</span>
-          <span>${m.away.name}</span>
-        </div>
-      </div>
-      <div class="modal-date">📅 ${fmtDate(m.kickoff)} (за Києвом)</div>
-    </div>
-    ${bodyHtml}`;
+  const bettersSection = isTbd ? '' :
+    `<div id="modalBetters" class="modal-betters"><span class="modal-betters-loading">…</span></div>`;
 
+  document.getElementById('modalContent').innerHTML = headerHtml + bodyHtml + bettersSection;
   document.getElementById('modal').classList.add('open');
+  if (!isTbd) loadMatchBetters(matchId);
+}
+
+async function loadMatchBetters(matchId) {
+  try {
+    const snap = await db.collection('predictions').where('matchId', '==', matchId).get();
+    const names = [];
+    snap.forEach(d => {
+      const p = d.data();
+      if (!p.displayName) return;
+      names.push(p.email === ADMIN_EMAIL ? 'Admin' : p.displayName);
+    });
+    const el = document.getElementById('modalBetters');
+    if (!el) return;
+    if (!names.length) {
+      el.innerHTML = `<div class="modal-betters-box modal-betters-empty-box"><p class="modal-betters-empty">Ніхто ще не зробив свою ставку на гру</p></div>`;
+    } else {
+      const rows = names.map(n => `<div class="modal-betters-name">👤 ${n}</div>`).join('');
+      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Ставка прийнята від:</div>${rows}</div>`;
+    }
+  } catch(e) {}
 }
 
 function closeModal() {
