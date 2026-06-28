@@ -1,0 +1,417 @@
+:root {
+  --barca-blue: #004D98;
+  --barca-red: #A50044;
+  --barca-gold: #EDBB00;
+  --dark-bg: #0a0a1a;
+  --card-bg: #0f1432;
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--dark-bg);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background:
+    radial-gradient(ellipse at top, #004D9833 0%, transparent 60%),
+    radial-gradient(ellipse at bottom, #A5004422 0%, transparent 60%),
+    var(--dark-bg);
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23004D98' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='28' stroke='%23004D98' stroke-opacity='0.1' stroke-width='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+.hero-badge {
+  background: linear-gradient(135deg, var(--barca-blue), var(--barca-red));
+  padding: 0.4rem 1.2rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 30px rgba(0, 77, 152, 0.6));
+  animation: float 3s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ffffff 30%, var(--barca-gold) 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.hero-subtitle span {
+  color: var(--barca-gold);
+  font-weight: 600;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--barca-blue), #0066cc);
+  color: #fff;
+  padding: 0.9rem 2rem;
+  border-radius: 3rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(0, 77, 152, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 77, 152, 0.6);
+}
+
+.btn-secondary {
+  border: 2px solid var(--barca-gold);
+  color: var(--barca-gold);
+  padding: 0.9rem 2rem;
+  border-radius: 3rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--barca-gold);
+  color: var(--dark-bg);
+  transform: translateY(-2px);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── ABOUT ── */
+.about {
+  padding: 6rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-label {
+  color: var(--barca-gold);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.about h2 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.about p {
+  color: var(--text-secondary);
+  font-size: 1.15rem;
+  line-height: 1.8;
+  max-width: 680px;
+  margin: 0 auto 2rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--barca-gold);
+  line-height: 1;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+/* ── TOURNAMENTS ── */
+.tournaments {
+  padding: 6rem 2rem;
+  background: linear-gradient(180deg, var(--dark-bg) 0%, #060612 100%);
+}
+
+.tournaments-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.tournaments h2 {
+  text-align: center;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.tournaments .section-label {
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.tournaments-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 3.5rem;
+  font-size: 1.05rem;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.tournament-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 1.2rem;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: block;
+  position: relative;
+}
+
+.tournament-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.tournament-card.active:hover {
+  box-shadow: 0 20px 50px rgba(0, 77, 152, 0.4);
+}
+
+.card-header {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  position: relative;
+}
+
+.card-header.wc2026 {
+  background: linear-gradient(135deg, #1a3a6e, #004D98, #2a5298);
+}
+
+.card-header.euro {
+  background: linear-gradient(135deg, #1a1a4e, #003399, #0044cc);
+}
+
+.card-header.ucl {
+  background: linear-gradient(135deg, #1a1a3e, #000080, #0000cc);
+}
+
+.card-header.laliga {
+  background: linear-gradient(135deg, #3a0a0a, #8b0000, #cc0000);
+}
+
+.card-soon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.2rem 0.7rem;
+  border-radius: 2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.card-active-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, var(--barca-gold), #ffaa00);
+  color: var(--dark-bg);
+  padding: 0.2rem 0.7rem;
+  border-radius: 2rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.card-body p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.card-link {
+  color: var(--barca-gold);
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.card-link.disabled {
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 3rem 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-logo {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.footer-text span {
+  color: var(--barca-red);
+}
+
+.footer-divider {
+  margin: 1.5rem auto;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--barca-blue), var(--barca-red));
+  border-radius: 2px;
+}
+
+.footer-copy {
+  color: rgba(255,255,255,0.25);
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+/* ── STRIPE DIVIDER ── */
+.stripe-bar {
+  height: 5px;
+  background: linear-gradient(90deg,
+    var(--barca-blue) 0%,
+    var(--barca-blue) 33%,
+    var(--barca-red) 33%,
+    var(--barca-red) 66%,
+    var(--barca-gold) 66%,
+    var(--barca-gold) 100%
+  );
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .stats { gap: 1.5rem; }
+  .cards-grid { grid-template-columns: 1fr; }
+}

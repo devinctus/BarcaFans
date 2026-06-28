@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BarcaFans — Прогнози на футбол з кумами</title>
+  <meta name="description" content="Фановий проект для змагань з прогнозами на футбольні турніри між друзями. Mes que un club." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">⚽ Més que un club</div>
+
+    <svg class="hero-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="56" fill="#004D98" stroke="#EDBB00" stroke-width="4"/>
+      <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <!-- Stripes -->
+      <rect x="44" y="4" width="10" height="112" fill="#A50044" opacity="0.6"/>
+      <rect x="66" y="4" width="10" height="112" fill="#A50044" opacity="0.6"/>
+      <!-- Cross -->
+      <line x1="60" y1="10" x2="60" y2="110" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+      <line x1="10" y1="60" x2="110" y2="60" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+      <!-- Ball pentagon pattern simplified -->
+      <circle cx="60" cy="60" r="20" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+      <text x="60" y="68" text-anchor="middle" font-size="24" fill="white">⚽</text>
+      <!-- BF letters -->
+      <text x="60" y="100" text-anchor="middle" font-size="10" font-weight="bold" fill="#EDBB00" font-family="Arial">BARCAFANS</text>
+    </svg>
+
+    <h1>BarcaFans</h1>
+    <p class="hero-subtitle">
+      Змагаємось з <span>кумами</span> — хто кращий у прогнозах на футбольні турніри.<br/>
+      Обираємо переможців, рахуємо очки, святкуємо голи. 🏆
+    </p>
+
+    <div class="hero-cta">
+      <a href="#tournaments" class="btn-primary">Турніри →</a>
+      <a href="#about" class="btn-secondary">Про проект</a>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Гортай вниз</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <div class="stripe-bar"></div>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-label">Про нас</div>
+    <h2>Футбол — це більше,<br/>ніж просто гра</h2>
+    <p>
+      BarcaFans — це фановий проект де ми з кумами змагаємось у прогнозах на найкращі футбольні турніри планети. Кожен робить ставки перед матчами, отримує очки за точні результати і бореться за звання <strong>Найкращого Прогнозиста</strong>.
+    </p>
+    <p>
+      Натхнені духом Барселони — comandos, passió, i victòria. Без грошей, тільки для задоволення і дружніх суперечок 🔵🔴.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">1</div>
+        <div class="stat-label">Турнір вже скоро</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Пристрасті й суперечок</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">🏆</div>
+        <div class="stat-label">Чемпіон визначиться</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENTS -->
+  <section class="tournaments" id="tournaments">
+    <div class="tournaments-inner">
+      <span class="section-label">Турніри</span>
+      <h2>Обирай і прогнозуй</h2>
+      <p class="tournaments-subtitle">Перший турнір вже на горизонті. Наступні — незабаром.</p>
+
+      <div class="cards-grid">
+
+        <!-- ЧС 2026 — АКТИВНИЙ -->
+        <a href="#" class="tournament-card active">
+          <div class="card-header wc2026">
+            🌍
+            <span class="card-active-badge">СКОРО</span>
+          </div>
+          <div class="card-body">
+            <h3>Чемпіонат Світу 2026</h3>
+            <p>Плей-офф фаза FIFA World Cup 2026. США, Мексика, Канада. 48 команд, 1 чемпіон.</p>
+            <span class="card-link">Перейти до турніру →</span>
+          </div>
+        </a>
+
+        <!-- EURO — НЕЗАБАРОМ -->
+        <a href="#" class="tournament-card">
+          <div class="card-header euro">
+            🇪🇺
+            <span class="card-soon">НЕЗАБАРОМ</span>
+          </div>
+          <div class="card-body">
+            <h3>ЄВРО 2028</h3>
+            <p>Чемпіонат Європи — найпрестижніший клубний турнір континенту. Хто переможе?</p>
+            <span class="card-link disabled">В розробці…</span>
+          </div>
+        </a>
+
+        <!-- UCL — НЕЗАБАРОМ -->
+        <a href="#" class="tournament-card">
+          <div class="card-header ucl">
+            ⭐
+            <span class="card-soon">НЕЗАБАРОМ</span>
+          </div>
+          <div class="card-body">
+            <h3>Ліга Чемпіонів</h3>
+            <p>Найкращі клуби Європи борються за найпрестижніший трофей. Хто переможе цього сезону?</p>
+            <span class="card-link disabled">В розробці…</span>
+          </div>
+        </a>
+
+        <!-- LA LIGA — НЕЗАБАРОМ -->
+        <a href="#" class="tournament-card">
+          <div class="card-header laliga">
+            🇪🇸
+            <span class="card-soon">НЕЗАБАРОМ</span>
+          </div>
+          <div class="card-body">
+            <h3>Ла Ліга</h3>
+            <p>Іспанська Прімера — домашній чемпіонат нашої улюбленої Барси. Visca el Barça!</p>
+            <span class="card-link disabled">В розробці…</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe-bar"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">⚽</div>
+    <p class="footer-text">Made with <span>❤️</span> for friends &amp; kumы</p>
+    <div class="footer-divider"></div>
+    <p class="footer-copy">BarcaFans © 2025 · Visca el Barça · Més que un club</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
