@@ -14,23 +14,25 @@ const ROUND_LABELS = {
 
 /* ── ALL MATCHES ── */
 const MATCHES = [
-  // ── ROUND OF 32 ──
-  { id:'r32_03', round:'r32', side:'left',  kickoff:'2026-06-28T19:00:00Z',
-    home:{code:'RSA',flag:'🇿🇦',name:'ПАР'},           away:{code:'CAN',flag:'🇨🇦',name:'Канада'} },
+  // ── ROUND OF 32 — LEFT (порядок як на офіційному брекеті, зверху вниз) ──
   { id:'r32_01', round:'r32', side:'left',  kickoff:'2026-06-29T20:30:00Z',
     home:{code:'GER',flag:'🇩🇪',name:'Німеччина'},      away:{code:'PAR',flag:'🇵🇾',name:'Парагвай'} },
-  { id:'r32_04', round:'r32', side:'left',  kickoff:'2026-06-30T01:00:00Z',
-    home:{code:'NED',flag:'🇳🇱',name:'Нідерланди'},     away:{code:'MOR',flag:'🇲🇦',name:'Марокко'} },
   { id:'r32_02', round:'r32', side:'left',  kickoff:'2026-06-30T21:00:00Z',
     home:{code:'FRA',flag:'🇫🇷',name:'Франція'},        away:{code:'SWE',flag:'🇸🇪',name:'Швеція'} },
-  { id:'r32_08', round:'r32', side:'left',  kickoff:'2026-07-01T20:00:00Z',
-    home:{code:'BEL',flag:'🇧🇪',name:'Бельгія'},        away:{code:'SEN',flag:'🇸🇳',name:'Сенегал'} },
-  { id:'r32_07', round:'r32', side:'left',  kickoff:'2026-07-02T00:00:00Z',
-    home:{code:'USA',flag:'🇺🇸',name:'США'},             away:{code:'BIH',flag:'🇧🇦',name:'Боснія'} },
-  { id:'r32_06', round:'r32', side:'left',  kickoff:'2026-07-02T19:00:00Z',
-    home:{code:'SPA',flag:'🇪🇸',name:'Іспанія'},        away:{code:'AUT',flag:'🇦🇹',name:'Австрія'} },
+  { id:'r32_03', round:'r32', side:'left',  kickoff:'2026-06-28T19:00:00Z',
+    home:{code:'RSA',flag:'🇿🇦',name:'ПАР'},           away:{code:'CAN',flag:'🇨🇦',name:'Канада'} },
+  { id:'r32_04', round:'r32', side:'left',  kickoff:'2026-06-30T01:00:00Z',
+    home:{code:'NED',flag:'🇳🇱',name:'Нідерланди'},     away:{code:'MOR',flag:'🇲🇦',name:'Марокко'} },
   { id:'r32_05', round:'r32', side:'left',  kickoff:'2026-07-02T23:00:00Z',
     home:{code:'POR',flag:'🇵🇹',name:'Португалія'},     away:{code:'CRO',flag:'🇭🇷',name:'Хорватія'} },
+  { id:'r32_06', round:'r32', side:'left',  kickoff:'2026-07-02T19:00:00Z',
+    home:{code:'SPA',flag:'🇪🇸',name:'Іспанія'},        away:{code:'AUT',flag:'🇦🇹',name:'Австрія'} },
+  { id:'r32_07', round:'r32', side:'left',  kickoff:'2026-07-02T00:00:00Z',
+    home:{code:'USA',flag:'🇺🇸',name:'США'},             away:{code:'BIH',flag:'🇧🇦',name:'Боснія'} },
+  { id:'r32_08', round:'r32', side:'left',  kickoff:'2026-07-01T20:00:00Z',
+    home:{code:'BEL',flag:'🇧🇪',name:'Бельгія'},        away:{code:'SEN',flag:'🇸🇳',name:'Сенегал'} },
+
+  // ── ROUND OF 32 — RIGHT (порядок як на офіційному брекеті, зверху вниз) ──
   { id:'r32_09', round:'r32', side:'right', kickoff:'2026-06-29T17:00:00Z',
     home:{code:'BRA',flag:'🇧🇷',name:'Бразилія'},       away:{code:'JAP',flag:'🇯🇵',name:'Японія'} },
   { id:'r32_10', round:'r32', side:'right', kickoff:'2026-06-30T17:00:00Z',
@@ -39,62 +41,66 @@ const MATCHES = [
     home:{code:'MEX',flag:'🇲🇽',name:'Мексика'},        away:{code:'ECU',flag:'🇪🇨',name:'Еквадор'} },
   { id:'r32_12', round:'r32', side:'right', kickoff:'2026-07-01T16:00:00Z',
     home:{code:'ENG',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',name:'Англія'},         away:{code:'DRC',flag:'🇨🇩',name:'ДР Конго'} },
-  { id:'r32_14', round:'r32', side:'right', kickoff:'2026-07-03T18:00:00Z',
-    home:{code:'AUS',flag:'🇦🇺',name:'Австралія'},      away:{code:'EGP',flag:'🇪🇬',name:'Єгипет'} },
   { id:'r32_13', round:'r32', side:'right', kickoff:'2026-07-03T22:00:00Z',
     home:{code:'ARG',flag:'🇦🇷',name:'Аргентина'},      away:{code:'CPV',flag:'🇨🇻',name:'Кабо-Верде'} },
+  { id:'r32_14', round:'r32', side:'right', kickoff:'2026-07-03T18:00:00Z',
+    home:{code:'AUS',flag:'🇦🇺',name:'Австралія'},      away:{code:'EGP',flag:'🇪🇬',name:'Єгипет'} },
   { id:'r32_15', round:'r32', side:'right', kickoff:'2026-07-03T03:00:00Z',
     home:{code:'SUI',flag:'🇨🇭',name:'Швейцарія'},      away:{code:'ALG',flag:'🇩🇿',name:'Алжир'} },
   { id:'r32_16', round:'r32', side:'right', kickoff:'2026-07-04T01:30:00Z',
     home:{code:'COL',flag:'🇨🇴',name:'Колумбія'},       away:{code:'GHA',flag:'🇬🇭',name:'Гана'} },
 
-  // ── ROUND OF 16 ──
-  // M90: W(RSA/CAN) vs W(GER/PAR) — Houston, Jul 4 17:00 UTC
+  // ── ROUND OF 16 — LEFT ──
+  // M90: W(GER/PAR) vs W(FRA/SWE) — Houston, Jul 4 17:00 UTC
   { id:'r16_90', round:'r16', side:'left',  kickoff:'2026-07-04T17:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_03'}, awayFrom:{type:'winner',matchId:'r32_01'} },
-  // M89: W(BRA/JAP) vs W(CIV/NOR) — Philadelphia, Jul 4 21:00 UTC
-  { id:'r16_89', round:'r16', side:'left',  kickoff:'2026-07-04T21:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_09'}, awayFrom:{type:'winner',matchId:'r32_10'} },
-  // M91: W(NED/MOR) vs W(FRA/SWE) — East Rutherford, Jul 5 20:00 UTC
+    homeFrom:{type:'winner',matchId:'r32_01'}, awayFrom:{type:'winner',matchId:'r32_02'} },
+  // M91: W(RSA/CAN) vs W(NED/MOR) — East Rutherford, Jul 5 20:00 UTC
   { id:'r16_91', round:'r16', side:'left',  kickoff:'2026-07-05T20:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_04'}, awayFrom:{type:'winner',matchId:'r32_02'} },
-  // M92: W(MEX/ECU) vs W(ENG/DRC) — Mexico City, Jul 6 00:00 UTC
-  { id:'r16_92', round:'r16', side:'left',  kickoff:'2026-07-06T00:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_11'}, awayFrom:{type:'winner',matchId:'r32_12'} },
-  // M93: W(SPA/AUT) vs W(POR/CRO) — Arlington, Jul 6 19:00 UTC
-  { id:'r16_93', round:'r16', side:'right', kickoff:'2026-07-06T19:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_06'}, awayFrom:{type:'winner',matchId:'r32_05'} },
-  // M94: W(BEL/SEN) vs W(USA/BIH) — Seattle, Jul 7 00:00 UTC
-  { id:'r16_94', round:'r16', side:'right', kickoff:'2026-07-07T00:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_08'}, awayFrom:{type:'winner',matchId:'r32_07'} },
-  // M95: W(AUS/EGP) vs W(COL/GHA) — Atlanta, Jul 7 16:00 UTC
-  { id:'r16_95', round:'r16', side:'right', kickoff:'2026-07-07T16:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_14'}, awayFrom:{type:'winner',matchId:'r32_16'} },
-  // M96: W(SUI/ALG) vs W(ARG/CPV) — Vancouver, Jul 7 20:00 UTC
-  { id:'r16_96', round:'r16', side:'right', kickoff:'2026-07-07T20:00:00Z',
-    homeFrom:{type:'winner',matchId:'r32_15'}, awayFrom:{type:'winner',matchId:'r32_13'} },
+    homeFrom:{type:'winner',matchId:'r32_03'}, awayFrom:{type:'winner',matchId:'r32_04'} },
+  // M93: W(POR/CRO) vs W(SPA/AUT) — Arlington, Jul 6 19:00 UTC
+  { id:'r16_93', round:'r16', side:'left',  kickoff:'2026-07-06T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_05'}, awayFrom:{type:'winner',matchId:'r32_06'} },
+  // M94: W(USA/BIH) vs W(BEL/SEN) — Seattle, Jul 7 00:00 UTC
+  { id:'r16_94', round:'r16', side:'left',  kickoff:'2026-07-07T00:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_07'}, awayFrom:{type:'winner',matchId:'r32_08'} },
 
-  // ── QUARTER-FINALS ──
-  // QF97: W(r16_89) vs W(r16_90) — Foxborough, Jul 9 20:00 UTC
+  // ── ROUND OF 16 — RIGHT ──
+  // M89: W(BRA/JAP) vs W(CIV/NOR) — Philadelphia, Jul 4 21:00 UTC
+  { id:'r16_89', round:'r16', side:'right', kickoff:'2026-07-04T21:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_09'}, awayFrom:{type:'winner',matchId:'r32_10'} },
+  // M92: W(MEX/ECU) vs W(ENG/DRC) — Mexico City, Jul 6 00:00 UTC
+  { id:'r16_92', round:'r16', side:'right', kickoff:'2026-07-06T00:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_11'}, awayFrom:{type:'winner',matchId:'r32_12'} },
+  // M95: W(ARG/CPV) vs W(AUS/EGP) — Atlanta, Jul 7 16:00 UTC
+  { id:'r16_95', round:'r16', side:'right', kickoff:'2026-07-07T16:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_13'}, awayFrom:{type:'winner',matchId:'r32_14'} },
+  // M96: W(SUI/ALG) vs W(COL/GHA) — Vancouver, Jul 7 20:00 UTC
+  { id:'r16_96', round:'r16', side:'right', kickoff:'2026-07-07T20:00:00Z',
+    homeFrom:{type:'winner',matchId:'r32_15'}, awayFrom:{type:'winner',matchId:'r32_16'} },
+
+  // ── QUARTER-FINALS — LEFT ──
+  // QF97: W(r16_90) vs W(r16_91) — Foxborough, Jul 9 20:00 UTC
   { id:'qf_97',  round:'qf', side:'left',  kickoff:'2026-07-09T20:00:00Z',
-    homeFrom:{type:'winner',matchId:'r16_89'}, awayFrom:{type:'winner',matchId:'r16_90'} },
-  // QF98: W(r16_93) vs W(r16_94) — Inglewood, Jul 10 19:00 UTC
-  { id:'qf_98',  round:'qf', side:'right', kickoff:'2026-07-10T19:00:00Z',
-    homeFrom:{type:'winner',matchId:'r16_93'}, awayFrom:{type:'winner',matchId:'r16_94'} },
-  // QF99: W(r16_91) vs W(r16_92) — Miami, Jul 11 21:00 UTC
+    homeFrom:{type:'winner',matchId:'r16_90'}, awayFrom:{type:'winner',matchId:'r16_91'} },
+  // QF99: W(r16_93) vs W(r16_94) — Miami, Jul 11 21:00 UTC
   { id:'qf_99',  round:'qf', side:'left',  kickoff:'2026-07-11T21:00:00Z',
-    homeFrom:{type:'winner',matchId:'r16_91'}, awayFrom:{type:'winner',matchId:'r16_92'} },
+    homeFrom:{type:'winner',matchId:'r16_93'}, awayFrom:{type:'winner',matchId:'r16_94'} },
+
+  // ── QUARTER-FINALS — RIGHT ──
+  // QF98: W(r16_89) vs W(r16_92) — Inglewood, Jul 10 19:00 UTC
+  { id:'qf_98',  round:'qf', side:'right', kickoff:'2026-07-10T19:00:00Z',
+    homeFrom:{type:'winner',matchId:'r16_89'}, awayFrom:{type:'winner',matchId:'r16_92'} },
   // QF100: W(r16_95) vs W(r16_96) — Kansas City, Jul 12 01:00 UTC
   { id:'qf_100', round:'qf', side:'right', kickoff:'2026-07-12T01:00:00Z',
     homeFrom:{type:'winner',matchId:'r16_95'}, awayFrom:{type:'winner',matchId:'r16_96'} },
 
   // ── SEMI-FINALS ──
-  // SF101: W(qf_97) vs W(qf_98) — Arlington, Jul 14 19:00 UTC
+  // SF101: W(qf_97) vs W(qf_99) — Arlington, Jul 14 19:00 UTC
   { id:'sf_101', round:'sf', side:'left',  kickoff:'2026-07-14T19:00:00Z',
-    homeFrom:{type:'winner',matchId:'qf_97'},  awayFrom:{type:'winner',matchId:'qf_98'} },
-  // SF102: W(qf_99) vs W(qf_100) — Atlanta, Jul 15 19:00 UTC
+    homeFrom:{type:'winner',matchId:'qf_97'},  awayFrom:{type:'winner',matchId:'qf_99'} },
+  // SF102: W(qf_98) vs W(qf_100) — Atlanta, Jul 15 19:00 UTC
   { id:'sf_102', round:'sf', side:'right', kickoff:'2026-07-15T19:00:00Z',
-    homeFrom:{type:'winner',matchId:'qf_99'},  awayFrom:{type:'winner',matchId:'qf_100'} },
+    homeFrom:{type:'winner',matchId:'qf_98'},  awayFrom:{type:'winner',matchId:'qf_100'} },
 
   // ── ФІНАЛ ──
   // 3rd place: L(sf_101) vs L(sf_102) — Miami, Jul 18 21:00 UTC
