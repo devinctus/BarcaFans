@@ -336,28 +336,28 @@ function matchCardHtml(m) {
     ? `<div class="match-pred">Твій прогноз: ${pred.homeGoals}:${pred.awayGoals}${ptsLabel}</div>` : '';
   const ctaHtml = (status === 'upcoming' && !isTbd)
     ? pred
-      ? `<div class="match-cta match-cta-done">✓ Ставка прийнята</div>`
+      ? `<div class="match-cta match-cta-done">✓ Прогноз прийнятий</div>`
       : `<div class="match-cta">+ Зробити прогноз</div>`
     : '';
-
-  const metaRowHtml = `<div class="match-meta-row">${badgeMap[status]}${predHtml}</div>`;
 
   let advHtml = '';
   if (res?.advancedTeam) {
     const w = getTeamInfo(m, res.advancedTeam);
-    if (!w?.tbd) advHtml = `<div class="match-adv">${w.flag} ${w.code} → далі</div>`;
+    if (!w?.tbd) advHtml = `<span class="match-adv">${w.flag} ${w.code} → Пройшла далі збірна</span>`;
   }
 
   const isFinalist = m.id === 'final_104' && res?.advancedTeam;
   if (isFinalist) {
     const champ = getTeamInfo(m, res.advancedTeam);
-    if (!champ?.tbd) advHtml = `<div class="match-adv champ">🏆 ${champ.flag} ${champ.name} — Чемпіон!</div>`;
+    if (!champ?.tbd) advHtml = `<span class="match-adv champ">🏆 ${champ.flag} ${champ.name} — Чемпіон!</span>`;
   }
   const is3rd = m.id === 'm3rd_103' && res?.advancedTeam;
   if (is3rd) {
     const third = getTeamInfo(m, res.advancedTeam);
-    if (!third?.tbd) advHtml = `<div class="match-adv third">🥉 ${third.flag} ${third.name}</div>`;
+    if (!third?.tbd) advHtml = `<span class="match-adv third">🥉 ${third.flag} ${third.name}</span>`;
   }
+
+  const metaRowHtml = `<div class="match-meta-row">${badgeMap[status]}${advHtml}${predHtml}</div>`;
 
   return `
     <div class="match-card ${status}${isTbd ? ' tbd' : ''}" onclick="openModal('${m.id}')">
@@ -368,7 +368,7 @@ function matchCardHtml(m) {
       </div>
       <div class="match-meta">
         ${metaRowHtml}
-        ${ctaHtml}${advHtml}
+        ${ctaHtml}
       </div>
     </div>`;
 }
@@ -552,7 +552,7 @@ function openModal(matchId) {
   } else if (status === 'finished') {
     const advTeam = res?.advancedTeam ? getTeamInfo(m, res.advancedTeam) : null;
     const advHtml = advTeam && !advTeam.tbd
-      ? `<div class="modal-adv">→ Пройшов далі: ${advTeam.flag} ${advTeam.name}</div>` : '';
+      ? `<div class="modal-adv">→ Пройшла далі збірна: ${advTeam.flag} ${advTeam.name}</div>` : '';
     bodyHtml = `
       <div class="modal-result">
         <div class="result-score">Результат (90 хв): <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
@@ -566,7 +566,7 @@ function openModal(matchId) {
     bodyHtml = `
       <div class="modal-closed">
         <div class="closed-icon">${status === 'live' ? '🔴' : '🔒'}</div>
-        <p>${status === 'live' ? 'Матч вже йде — ставки закрито' : 'Ставки закрито — до початку менше 60 хвилин'}</p>
+        <p>${status === 'live' ? 'Матч вже йде — прогнози закриті' : 'Прогнози закриті — до початку менше 60 хвилин'}</p>
         ${pred
           ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
           : `<div class="pred-score grey">Ти не встиг зробити прогноз</div>`}
@@ -574,7 +574,7 @@ function openModal(matchId) {
   } else {
     const currentBetHtml = pred ? `
       <div class="modal-current-bet">
-        <div class="modal-current-bet-label">✓ Ваша ставка</div>
+        <div class="modal-current-bet-label">✓ Твій прогноз</div>
         <div class="modal-current-bet-score">${pred.homeGoals} : ${pred.awayGoals}</div>
       </div>` : '';
     bodyHtml = `
@@ -594,9 +594,9 @@ function openModal(matchId) {
           </div>
         </div>
         <button type="submit" class="btn-submit">
-          ${pred ? '🔄 Змінити ставку' : '⚽ Зробити ставку'}
+          ${pred ? '🔄 Змінити прогноз' : '⚽ Зробити прогноз'}
         </button>
-        <p class="deadline-note">🔒 Ставки закриваються за 1 годину до початку матчу</p>
+        <p class="deadline-note">🔒 Прогнози закриваються за 1 годину до початку матчу</p>
       </form>`;
   }
 
@@ -622,7 +622,7 @@ async function loadMatchBetters(matchId) {
       entries.push(p);
     });
     if (!entries.length) {
-      el.innerHTML = `<div class="modal-betters-box modal-betters-empty-box"><p class="modal-betters-empty">Ніхто ще не зробив свою ставку на гру</p></div>`;
+      el.innerHTML = `<div class="modal-betters-box modal-betters-empty-box"><p class="modal-betters-empty">Ніхто ще не зробив свій прогноз на гру</p></div>`;
       return;
     }
     if (finished) {

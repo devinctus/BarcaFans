@@ -288,7 +288,6 @@
   font-size: 0.78rem;
   color: #4ade80;
   font-weight: 600;
-  margin-top: 0.2rem;
 }
 .match-adv.champ { color: var(--barca-gold); font-size: 0.85rem; }
 .match-adv.third { color: #cd7f32; }
@@ -749,7 +748,6 @@
   font-size: 0.78rem;
   color: #4ade80;
   font-weight: 600;
-  margin-top: 0.2rem;
 }
 .match-adv.champ { color: var(--barca-gold); font-size: 0.85rem; }
 .match-adv.third { color: #cd7f32; }
