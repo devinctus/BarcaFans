@@ -473,6 +473,18 @@ async function resetResult(matchId) {
   rebuildLeaderboard();
 }
 
+async function deleteAllPredictions() {
+  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+  if (!confirm('Видалити ВСІ прогнози всіх учасників? Цю дію не можна скасувати.')) return;
+  const snap = await db.collection('predictions').get();
+  if (snap.empty) { alert('Прогнозів не знайдено.'); return; }
+  const batch = db.batch();
+  snap.forEach(d => batch.delete(d.ref));
+  await batch.commit();
+  predictions = {};
+  renderAll();
+}
+
 async function deleteAdminPredictions() {
   if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
   if (!confirm('Видалити всі прогнози адміна? Цю дію не можна скасувати.')) return;
