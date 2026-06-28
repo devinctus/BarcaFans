@@ -190,8 +190,6 @@ function login() {
 }
 function logout() { auth.signOut(); }
 
-auth.getRedirectResult().catch(console.error);
-
 async function saveUserProfile(user) {
   await db.collection('users').doc(user.uid).set({
     uid: user.uid, displayName: user.displayName,
