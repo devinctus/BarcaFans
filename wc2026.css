@@ -86,6 +86,33 @@
   text-transform: uppercase;
 }
 
+/* ── ROUND TABS BAR ── */
+.round-tabs-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.2rem 1rem 0;
+  flex-wrap: wrap;
+}
+.round-tab {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-secondary);
+  padding: 0.45rem 1.1rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+.round-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.round-tab.active {
+  background: linear-gradient(135deg, #A50044, #cc0055);
+  border-color: transparent;
+  color: #fff;
+}
+
 /* ── BRACKET ── */
 .bracket-section {
   padding: 2rem 1.5rem 4rem;
@@ -151,6 +178,11 @@
 .match-card.finished { border-color: rgba(255,255,255,0.1); }
 .match-card.live { border-color: #ff4444; box-shadow: 0 0 10px rgba(255,68,68,0.2); }
 
+/* ── TBD MATCH CARD ── */
+.match-card.tbd { opacity: 0.55; cursor: default; }
+.match-card.tbd:hover { transform: none; box-shadow: none; border-color: rgba(255,255,255,0.07); }
+.match-card.tbd .vs { color: rgba(255,255,255,0.3); }
+
 .match-teams {
   display: flex;
   align-items: center;
@@ -210,6 +242,16 @@
   font-weight: 600;
 }
 
+/* ── ADVANCER BADGE ON CARD ── */
+.match-adv {
+  font-size: 0.78rem;
+  color: #4ade80;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.match-adv.champ { color: var(--barca-gold); font-size: 0.85rem; }
+.match-adv.third { color: #cd7f32; }
+
 /* ── SCORING RULES ── */
 .rules-section {
   padding: 3rem 2rem;
@@ -264,8 +306,6 @@
 }
 .leaderboard-table tr:last-child td { border-bottom: none; }
 .leaderboard-table tr.my-row td { background: rgba(0,77,152,0.12); }
-.leaderboard-table tr.my-row:first-child td:first-child { border-radius: 0.5rem 0 0 0.5rem; }
-.leaderboard-table tr.my-row:first-child td:last-child { border-radius: 0 0.5rem 0.5rem 0; }
 
 .rank { font-size: 1.1rem; font-weight: 700; width: 2rem; }
 .player { display: flex; align-items: center; gap: 0.7rem; font-weight: 600; }
@@ -336,7 +376,6 @@
 .modal-vs { color: var(--text-secondary); font-size: 1rem; font-weight: 700; }
 .modal-date { font-size: 0.85rem; color: var(--text-secondary); }
 
-/* Score input */
 .score-input {
   display: flex;
   align-items: center;
@@ -388,7 +427,6 @@
 
 .deadline-note { font-size: 0.8rem; color: var(--text-secondary); text-align: center; }
 
-/* Modal states */
 .modal-login-prompt { text-align: center; padding: 1rem 0; }
 .modal-login-prompt p { color: var(--text-secondary); margin-bottom: 1.2rem; }
 
@@ -402,6 +440,11 @@
 .pts-msg.gold { background: rgba(237,187,0,0.15); color: var(--barca-gold); }
 .pts-msg.green { background: rgba(74,222,128,0.12); color: #4ade80; }
 .pts-msg.red { background: rgba(248,113,113,0.12); color: #f87171; }
+
+/* ── MODAL EXTRAS ── */
+.modal-tbd { text-align: center; padding: 1.5rem 0; color: var(--text-secondary); line-height: 1.8; }
+.modal-adv { font-size: 0.9rem; color: #4ade80; font-weight: 600; margin-bottom: 0.7rem; }
+.modal-team.tbd { opacity: 0.5; }
 
 /* ── ADMIN PANEL ── */
 .admin-section {
@@ -417,15 +460,68 @@
   margin-bottom: 1rem;
   color: var(--barca-gold);
 }
+
+.admin-round-group { margin-bottom: 2rem; }
+.admin-round-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
 .admin-match-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-match-label { font-size: 0.9rem; font-weight: 600; }
+.admin-match-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.admin-match-date { font-size: 0.75rem; color: var(--text-secondary); }
+.admin-row-controls {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
   flex-wrap: wrap;
 }
-.admin-match-label { flex: 1; font-size: 0.9rem; min-width: 140px; }
+
+/* ── ADVANCER TOGGLE ── */
+.adv-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.adv-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.adv-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+.adv-btn.adv-selected {
+  background: rgba(74,222,128,0.15);
+  border-color: #4ade80;
+  color: #4ade80;
+}
+.adv-arrow { font-size: 0.85rem; color: rgba(255,255,255,0.3); }
+
 .admin-score-inputs { display: flex; align-items: center; gap: 0.4rem; }
 .admin-score-inputs input {
   width: 44px;

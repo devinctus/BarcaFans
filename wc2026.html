@@ -31,6 +31,15 @@
 
   <div class="stripe-bar"></div>
 
+  <!-- ROUND TABS -->
+  <div class="round-tabs-bar">
+    <button class="round-tab active" data-round="r32"   onclick="switchRound('r32')">R32</button>
+    <button class="round-tab"        data-round="r16"   onclick="switchRound('r16')">R16</button>
+    <button class="round-tab"        data-round="qf"    onclick="switchRound('qf')">¼ Фін.</button>
+    <button class="round-tab"        data-round="sf"    onclick="switchRound('sf')">½ Фін.</button>
+    <button class="round-tab"        data-round="final" onclick="switchRound('final')">Фінал</button>
+  </div>
+
   <!-- BRACKET -->
   <section class="bracket-section">
     <div class="bracket-container">
@@ -38,7 +47,7 @@
 
       <div class="bracket-center">
         <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/2026_FIFA_World_Cup_emblem.svg" width="80" height="80" alt="WC 2026" />
-        <div class="round-label">ROUND<br/>OF 32</div>
+        <div class="round-label" id="bracketRoundLabel">ROUND<br/>OF 32</div>
       </div>
 
       <div class="bracket-col" id="rightBracket"></div>
