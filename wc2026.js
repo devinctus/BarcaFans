@@ -165,7 +165,8 @@ function getStatus(match) {
   const res = results[match.id];
   if (res && res.status === 'finished') return 'finished';
   if (now >= kickoff && now < endTime)  return 'live';
-  if (now >= predCutoff)                return 'closed';
+  // TODO: повернути обмеження "прогнози закриваються за 1 годину до матчу"
+  // if (now >= predCutoff)                return 'closed';
   return 'upcoming';
 }
 
