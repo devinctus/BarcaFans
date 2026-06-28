@@ -144,7 +144,7 @@ function calcPoints(pH, pA, rH, rA) {
 function getStatus(match) {
   const now        = Date.now();
   const kickoff    = new Date(match.kickoff).getTime();
-  const predCutoff = kickoff - 720 * 60000; // 12h test window; change to 60 for prod
+  const predCutoff = kickoff - 60 * 60000;
   const endTime    = kickoff + 150 * 60000;
   const res = results[match.id];
   if (res && res.status === 'finished') return 'finished';
@@ -275,9 +275,10 @@ function renderBracket() {
   document.getElementById('rightBracket').innerHTML = right.map(matchCardHtml).join('');
 
   const roundLabel = document.getElementById('bracketRoundLabel');
-  if (roundLabel) {
-    roundLabel.textContent = ROUND_LABELS[activeRound].toUpperCase();
-  }
+  if (roundLabel) roundLabel.textContent = ROUND_LABELS[activeRound].toUpperCase();
+
+  const heroLabel = document.getElementById('heroRoundLabel');
+  if (heroLabel) heroLabel.textContent = ROUND_LABELS[activeRound] + ' · Плей-офф';
 }
 
 function matchCardHtml(m) {
@@ -547,7 +548,7 @@ function openModal(matchId) {
         <button type="submit" class="btn-submit">
           ${pred ? '🔄 Змінити ставку' : '⚽ Зробити ставку'}
         </button>
-        <p class="deadline-note">🔒 Ставки закриваються за 12 годин до початку матчу</p>
+        <p class="deadline-note">🔒 Ставки закриваються за 1 годину до початку матчу</p>
       </form>`;
   }
 
