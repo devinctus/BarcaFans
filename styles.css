@@ -305,6 +305,13 @@ body {
   background: linear-gradient(135deg, #3a0a0a, #8b0000, #cc0000);
 }
 
+.card-header img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+
 .card-soon {
   position: absolute;
   top: 1rem;
