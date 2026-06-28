@@ -301,13 +301,27 @@ function switchRound(round) {
   renderBracket();
 }
 
+/* перемикання desktop/mobile порядку при зміні розміру вікна */
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(renderBracket, 150);
+});
+
 /* ── BRACKET ── */
 function renderBracket() {
   const roundMatches = MATCHES.filter(m => m.round === activeRound);
-  const left  = roundMatches.filter(m => m.side === 'left');
-  const right = roundMatches.filter(m => m.side === 'right');
-  document.getElementById('leftBracket').innerHTML  = left.map(matchCardHtml).join('');
-  document.getElementById('rightBracket').innerHTML = right.map(matchCardHtml).join('');
+  if (window.innerWidth <= 900) {
+    // Мобільний: одна колонка, матчі відсортовані за датою проведення
+    const sorted = [...roundMatches].sort((a, b) => new Date(a.kickoff) - new Date(b.kickoff));
+    document.getElementById('leftBracket').innerHTML  = sorted.map(matchCardHtml).join('');
+    document.getElementById('rightBracket').innerHTML = '';
+  } else {
+    const left  = roundMatches.filter(m => m.side === 'left');
+    const right = roundMatches.filter(m => m.side === 'right');
+    document.getElementById('leftBracket').innerHTML  = left.map(matchCardHtml).join('');
+    document.getElementById('rightBracket').innerHTML = right.map(matchCardHtml).join('');
+  }
 
   const roundLabel = document.getElementById('bracketRoundLabel');
   if (roundLabel) roundLabel.textContent = ROUND_LABELS[activeRound].toUpperCase();
