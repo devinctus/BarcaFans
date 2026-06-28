@@ -66,12 +66,8 @@
 /* ── WC HERO ── */
 .wc-hero {
   text-align: center;
-  padding: 3.5rem 2rem 2.5rem;
+  padding: 3rem 2rem 2.5rem;
   background: radial-gradient(ellipse at center, rgba(0,77,152,0.2) 0%, transparent 70%);
-}
-.wc-hero-logo {
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 20px rgba(0,77,152,0.5));
 }
 .wc-hero h1 {
   font-size: clamp(1.8rem, 5vw, 3rem);
@@ -84,6 +80,12 @@
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
+}
+
+.hero-leaderboard {
+  max-width: 480px;
+  width: 100%;
+  margin: 1.5rem auto 0;
 }
 
 /* ── ROUND TABS BAR ── */
@@ -240,6 +242,7 @@
   font-size: 0.72rem;
   color: var(--barca-gold);
   font-weight: 600;
+  align-self: center;
 }
 .match-cta-done {
   color: #4ade80;
@@ -283,18 +286,7 @@
 .rule-pts { font-size: 1.4rem; font-weight: 900; color: var(--barca-gold); }
 .rule-desc { font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.3rem; }
 
-/* ── LEADERBOARD ── */
-.leaderboard-section {
-  padding: 3rem 2rem 5rem;
-  max-width: 700px;
-  margin: 0 auto;
-}
-.leaderboard-section h2 {
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-}
+/* ── LEADERBOARD (hero-embedded) ── */
 .leaderboard-table {
   width: 100%;
   border-collapse: collapse;
