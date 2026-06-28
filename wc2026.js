@@ -181,7 +181,10 @@ function fmtDate(iso) {
 function login() {
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
-  auth.signInWithPopup(provider).catch(console.error);
+  auth.signInWithPopup(provider).catch(e => {
+    alert('LOGIN ERROR: ' + e.code + '\n' + e.message);
+    console.error(e);
+  });
 }
 function logout() { auth.signOut(); }
 
