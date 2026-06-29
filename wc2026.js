@@ -161,7 +161,7 @@ function getStatus(match) {
   const now        = Date.now();
   const kickoff    = new Date(match.kickoff).getTime();
   const predCutoff = kickoff - 60 * 60000;
-  const endTime    = kickoff + 150 * 60000;
+  const endTime    = kickoff + 180 * 60000;
   const res = results[match.id];
   if (res && res.status === 'finished') return 'finished';
   if (now >= kickoff && now < endTime)  return 'live';
