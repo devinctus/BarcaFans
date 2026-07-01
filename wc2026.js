@@ -237,11 +237,14 @@ db.collection('results').onSnapshot(snap => {
 });
 
 /* ── LEADERBOARD ── */
+// Матчі, які не враховуються в таблиці лідерів (r32_03 = ПАР–Канада, перший матч)
+const LEADERBOARD_EXCLUDED = ['r32_03'];
 function rebuildLeaderboard() {
   db.collection('predictions').get().then(snap => {
     const pts = {}, names = {}, photos = {}, emails = {};
     snap.forEach(d => {
       const p = d.data();
+      if (LEADERBOARD_EXCLUDED.includes(p.matchId)) return;
       const r = results[p.matchId];
       if (!r || r.status !== 'finished') return;
       const score = calcPoints(p.homeGoals, p.awayGoals, r.homeGoals, r.awayGoals);

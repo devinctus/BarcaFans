@@ -22,7 +22,7 @@
   font-size: 1.1rem;
 }
 
-.nav-logo img { border-radius: 50%; }
+.nav-logo img { }
 
 .btn-login {
   background: linear-gradient(135deg, #004D98, #0066cc);
