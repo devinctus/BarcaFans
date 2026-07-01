@@ -223,6 +223,7 @@ auth.onAuthStateChanged(async user => {
   }
   updateNavbar(user);
   toggleAdmin(user);
+  rebuildLeaderboard();
   _authReady = true;
   checkHideLoading();
 });
