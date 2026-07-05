@@ -54,8 +54,8 @@ const MATCHES = [
   // M90: W(GER/PAR) vs W(FRA/SWE) — Philadelphia, Jul 4 17:00 ET / 21:00 UTC
   { id:'r16_90', round:'r16', side:'left',  kickoff:'2026-07-04T21:00:00Z',
     homeFrom:{type:'winner',matchId:'r32_01'}, awayFrom:{type:'winner',matchId:'r32_02'} },
-  // M91: W(RSA/CAN) vs W(NED/MOR) — East Rutherford, Jul 5 20:00 UTC
-  { id:'r16_91', round:'r16', side:'left',  kickoff:'2026-07-05T20:00:00Z',
+  // Канада/Марокко (W RSA/CAN vs W NED/MOR) — Houston, Jul 4 13:00 ET / 17:00 UTC
+  { id:'r16_91', round:'r16', side:'left',  kickoff:'2026-07-04T17:00:00Z',
     homeFrom:{type:'winner',matchId:'r32_03'}, awayFrom:{type:'winner',matchId:'r32_04'} },
   // M93: W(POR/CRO) vs W(SPA/AUT) — Arlington, Jul 6 19:00 UTC
   { id:'r16_93', round:'r16', side:'left',  kickoff:'2026-07-06T19:00:00Z',
@@ -65,8 +65,8 @@ const MATCHES = [
     homeFrom:{type:'winner',matchId:'r32_07'}, awayFrom:{type:'winner',matchId:'r32_08'} },
 
   // ── ROUND OF 16 — RIGHT ──
-  // M89: W(BRA/JAP) vs W(CIV/NOR) — Houston, Jul 4 13:00 ET / 17:00 UTC
-  { id:'r16_89', round:'r16', side:'right', kickoff:'2026-07-04T17:00:00Z',
+  // Бразилія/Норвегія (W BRA/JAP vs W CIV/NOR) — East Rutherford, Jul 5 16:00 ET / 20:00 UTC
+  { id:'r16_89', round:'r16', side:'right', kickoff:'2026-07-05T20:00:00Z',
     homeFrom:{type:'winner',matchId:'r32_09'}, awayFrom:{type:'winner',matchId:'r32_10'} },
   // M92: W(MEX/ECU) vs W(ENG/DRC) — Mexico City, Jul 6 00:00 UTC
   { id:'r16_92', round:'r16', side:'right', kickoff:'2026-07-06T00:00:00Z',
