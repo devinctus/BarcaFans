@@ -51,8 +51,8 @@ const MATCHES = [
     home:{code:'COL',flag:'🇨🇴',name:'Колумбія'},       away:{code:'GHA',flag:'🇬🇭',name:'Гана'} },
 
   // ── ROUND OF 16 — LEFT ──
-  // M90: W(GER/PAR) vs W(FRA/SWE) — Houston, Jul 4 17:00 UTC
-  { id:'r16_90', round:'r16', side:'left',  kickoff:'2026-07-04T17:00:00Z',
+  // M90: W(GER/PAR) vs W(FRA/SWE) — Philadelphia, Jul 4 17:00 ET / 21:00 UTC
+  { id:'r16_90', round:'r16', side:'left',  kickoff:'2026-07-04T21:00:00Z',
     homeFrom:{type:'winner',matchId:'r32_01'}, awayFrom:{type:'winner',matchId:'r32_02'} },
   // M91: W(RSA/CAN) vs W(NED/MOR) — East Rutherford, Jul 5 20:00 UTC
   { id:'r16_91', round:'r16', side:'left',  kickoff:'2026-07-05T20:00:00Z',
@@ -65,8 +65,8 @@ const MATCHES = [
     homeFrom:{type:'winner',matchId:'r32_07'}, awayFrom:{type:'winner',matchId:'r32_08'} },
 
   // ── ROUND OF 16 — RIGHT ──
-  // M89: W(BRA/JAP) vs W(CIV/NOR) — Philadelphia, Jul 4 21:00 UTC
-  { id:'r16_89', round:'r16', side:'right', kickoff:'2026-07-04T21:00:00Z',
+  // M89: W(BRA/JAP) vs W(CIV/NOR) — Houston, Jul 4 13:00 ET / 17:00 UTC
+  { id:'r16_89', round:'r16', side:'right', kickoff:'2026-07-04T17:00:00Z',
     homeFrom:{type:'winner',matchId:'r32_09'}, awayFrom:{type:'winner',matchId:'r32_10'} },
   // M92: W(MEX/ECU) vs W(ENG/DRC) — Mexico City, Jul 6 00:00 UTC
   { id:'r16_92', round:'r16', side:'right', kickoff:'2026-07-06T00:00:00Z',
@@ -232,6 +232,10 @@ auth.onAuthStateChanged(async user => {
 db.collection('results').onSnapshot(snap => {
   results = {};
   snap.forEach(d => { results[d.id] = d.data(); });
+  if (!userSelectedRound) {
+    activeRound = computeDefaultRound();
+    applyActiveRoundTab();
+  }
   renderAll();
   rebuildLeaderboard();
   if (!_resultsReady) { _resultsReady = true; checkHideLoading(); }
@@ -298,11 +302,30 @@ function renderAll() {
 }
 
 /* ── ROUND TABS ── */
-function switchRound(round) {
-  activeRound = round;
+const ROUND_ORDER = ['r32', 'r16', 'qf', 'sf', 'final'];
+let userSelectedRound = false;
+
+function applyActiveRoundTab() {
   document.querySelectorAll('.round-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.round === round);
+    btn.classList.toggle('active', btn.dataset.round === activeRound);
   });
+}
+
+// Перший етап, у якому ще НЕ всі матчі мають внесений результат.
+// Коли весь етап завершено — за замовчуванням відкриваємо наступний.
+function computeDefaultRound() {
+  for (const r of ROUND_ORDER) {
+    const ms = MATCHES.filter(m => m.round === r);
+    const allDone = ms.length > 0 && ms.every(m => results[m.id] && results[m.id].status === 'finished');
+    if (!allDone) return r;
+  }
+  return 'final';
+}
+
+function switchRound(round) {
+  userSelectedRound = true;
+  activeRound = round;
+  applyActiveRoundTab();
   renderBracket();
 }
 
