@@ -82,13 +82,13 @@ const MATCHES = [
   // QF97: W(r16_90) vs W(r16_91) — Foxborough, Jul 9 20:00 UTC
   { id:'qf_97',  round:'qf', side:'left',  kickoff:'2026-07-09T20:00:00Z',
     homeFrom:{type:'winner',matchId:'r16_90'}, awayFrom:{type:'winner',matchId:'r16_91'} },
-  // QF99: W(r16_93) vs W(r16_94) — Miami, Jul 11 21:00 UTC
-  { id:'qf_99',  round:'qf', side:'left',  kickoff:'2026-07-11T21:00:00Z',
+  // Іспанія/Бельгія (W r16_93 vs W r16_94) — real M98, Los Angeles, Jul 10 15:00 ET / 19:00 UTC
+  { id:'qf_99',  round:'qf', side:'left',  kickoff:'2026-07-10T19:00:00Z',
     homeFrom:{type:'winner',matchId:'r16_93'}, awayFrom:{type:'winner',matchId:'r16_94'} },
 
   // ── QUARTER-FINALS — RIGHT ──
-  // QF98: W(r16_89) vs W(r16_92) — Inglewood, Jul 10 19:00 UTC
-  { id:'qf_98',  round:'qf', side:'right', kickoff:'2026-07-10T19:00:00Z',
+  // Норвегія/Англія (W r16_89 vs W r16_92) — real M99, Miami, Jul 11 17:00 ET / 21:00 UTC
+  { id:'qf_98',  round:'qf', side:'right', kickoff:'2026-07-11T21:00:00Z',
     homeFrom:{type:'winner',matchId:'r16_89'}, awayFrom:{type:'winner',matchId:'r16_92'} },
   // QF100: W(r16_95) vs W(r16_96) — Kansas City, Jul 12 01:00 UTC
   { id:'qf_100', round:'qf', side:'right', kickoff:'2026-07-12T01:00:00Z',
