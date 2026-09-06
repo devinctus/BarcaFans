@@ -5,30 +5,40 @@
 
 let activeTab = String(BFLogic.currentMatchday(UCL_MATCHES, Date.now()));
 
+/* Single source of the crest markup, used by cards, the standings table and
+   the modal. Falls back to the club's text code if the image fails to load,
+   so a missing file never collapses the layout. */
+function crestHtml(t, cls) {
+  return `<img class="${cls}" src="${t.crest}" alt="" ` +
+         `onerror="this.replaceWith(Object.assign(document.createElement('span'),` +
+         `{className:'club-crest-fallback',textContent:'${t.code}'}))" />`;
+}
+
 function teamCell(code, align) {
   const t = UCL_TEAMS[code];
-  const crest = `<img class="club-crest" src="${t.crest}" alt="" ` +
-                `onerror="this.replaceWith(Object.assign(document.createElement('span'),` +
-                `{className:'club-crest-fallback',textContent:'${t.code}'}))" />`;
+  const crest = crestHtml(t, 'club-crest');
   return align === 'home'
     ? `<span class="team home">${crest}<span class="club-code">${t.code}</span> ${t.country}</span>`
     : `<span class="team away">${t.country} <span class="club-code">${t.code}</span>${crest}</span>`;
 }
 
 /* ── MODAL ──
-   Resolves the two UCL teams into the {code, flag, name} shape BFShared's
-   shared modal expects (mirrors wc2026.js's openModal wrapper), then
-   delegates to the shared core. Kept as a short bare global so card markup
-   can call it directly from onclick=. */
+   Clubs are identified by their crest, not by a national flag: several clubs
+   share a country, so a flag alone does not say who is playing. `badge` is
+   the shared modal's optional pre-rendered override for `flag`; the World Cup
+   supplies no badge and keeps showing national flags. */
 function openModal(matchId) {
   const m = UCL_MATCHES.find(x => x.id === matchId);
   if (!m) return;
   const home = UCL_TEAMS[m.home];
   const away = UCL_TEAMS[m.away];
-  BFShared.openModal(matchId, {
-    home: { code: home.code, flag: home.country, name: home.name },
-    away: { code: away.code, flag: away.country, name: away.name }
+  const team = t => ({
+    code: t.code,
+    name: `${t.name} ${t.country}`,
+    badge: crestHtml(t, 'modal-crest'),
+    flag: t.country
   });
+  BFShared.openModal(matchId, { home: team(home), away: team(away) });
 }
 
 function matchCardHtml(m) {
@@ -69,7 +79,7 @@ function standingsHtml() {
     const t = UCL_TEAMS[r.code];
     return `<tr class="${zone(r)}">
       <td>${r.rank}</td>
-      <td class="st-team"><img class="club-crest" src="${t.crest}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'club-crest-fallback',textContent:'${t.code}'}))" /> ${t.name} ${t.country}</td>
+      <td class="st-team">${crestHtml(t, 'club-crest')} ${t.name} ${t.country}</td>
       <td>${r.played}</td><td>${r.win}</td><td>${r.draw}</td><td>${r.loss}</td>
       <td>${r.gf}:${r.ga}</td><td>${r.gd > 0 ? '+' : ''}${r.gd}</td><td class="st-pts">${r.pts}</td>
     </tr>`;
