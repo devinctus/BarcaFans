@@ -197,27 +197,37 @@ const BFShared = (function () {
     rebuildLeaderboard();
   }
 
+  /* Both delete operations below act on the top-level `predictions`
+     collection, which holds every tournament's rows in one place. Without
+     scoping, deleting from one tournament's admin page would also wipe the
+     other tournament's predictions. BFLogic.scopeToMatchIds keeps only the
+     rows whose matchId belongs to THIS page's matchIdSet (built in init()),
+     so a foreign-tournament prediction is left untouched. */
   async function deleteAllPredictions() {
     if (!isAdmin()) return;
-    if (!confirm('Видалити ВСІ прогнози всіх учасників? Цю дію не можна скасувати.')) return;
+    if (!confirm(`Видалити ВСІ прогнози всіх учасників турніру "${CFG.id}"? Цю дію не можна скасувати.`)) return;
     const snap = await db.collection('predictions').get();
-    if (snap.empty) { alert('Прогнозів не знайдено.'); return; }
+    const rows = snap.docs.map(d => ({ ref: d.ref, matchId: d.data().matchId }));
+    const toDelete = BFLogic.scopeToMatchIds(rows, matchIdSet);
+    if (!toDelete.length) { alert('Прогнозів не знайдено.'); return; }
     const batch = db.batch();
-    snap.forEach(d => batch.delete(d.ref));
+    toDelete.forEach(r => batch.delete(r.ref));
     await batch.commit();
-    state.predictions = {};
+    toDelete.forEach(r => { delete state.predictions[r.matchId]; });
     CFG.onRender();
   }
 
   async function deleteAdminPredictions() {
     if (!isAdmin()) return;
-    if (!confirm('Видалити всі прогнози адміна? Цю дію не можна скасувати.')) return;
+    if (!confirm(`Видалити всі прогнози адміна турніру "${CFG.id}"? Цю дію не можна скасувати.`)) return;
     const snap = await db.collection('predictions').where('email', '==', ADMIN_EMAIL).get();
-    if (snap.empty) { alert('Прогнозів адміна не знайдено.'); return; }
+    const rows = snap.docs.map(d => ({ ref: d.ref, matchId: d.data().matchId }));
+    const toDelete = BFLogic.scopeToMatchIds(rows, matchIdSet);
+    if (!toDelete.length) { alert('Прогнозів адміна не знайдено.'); return; }
     const batch = db.batch();
-    snap.forEach(d => batch.delete(d.ref));
+    toDelete.forEach(r => batch.delete(r.ref));
     await batch.commit();
-    snap.forEach(d => { delete state.predictions[d.data().matchId]; });
+    toDelete.forEach(r => { delete state.predictions[r.matchId]; });
     CFG.onRender();
   }
 

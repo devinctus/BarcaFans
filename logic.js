@@ -77,5 +77,17 @@
     return mds[mds.length - 1];
   }
 
-  return { calcPoints, getStatus, tallyLeaderboard, LIVE_WINDOW_MS, computeStandings, currentMatchday };
+  /* Keeps only the rows whose matchId belongs to the given tournament's
+     matchIdSet. Used to scope bulk-delete operations (predictions collection
+     spans every tournament) so one page's admin actions never touch another
+     tournament's data. A row whose matchId is NOT in the set is left out of
+     the result, i.e. it survives the delete. */
+  function scopeToMatchIds(rows, matchIdSet) {
+    return rows.filter(r => matchIdSet.has(r.matchId));
+  }
+
+  return {
+    calcPoints, getStatus, tallyLeaderboard, LIVE_WINDOW_MS, computeStandings, currentMatchday,
+    scopeToMatchIds
+  };
 });

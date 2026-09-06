@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ліга Чемпіонів 2026/27 · BarcaFans</title>
+  <meta name="description" content="Прогнози на ліговий етап Ліги Чемпіонів УЄФА 2026/27" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="wc2026.css?v=20260906-1" />
+  <link rel="stylesheet" href="ucl.css?v=20260906-1" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>" />
+</head>
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div class="loading-screen" id="loadingScreen">
+    <img src="https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg" class="loading-logo" alt="FC Barcelona" />
+    <p class="loading-text">Завантаження...</p>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg" width="28" height="28" alt="FC Barcelona" />
+      BarcaFans
+    </a>
+    <div id="authArea">
+      <button class="btn-login" onclick="login()">Увійти через Google</button>
+    </div>
+  </nav>
+
+  <!-- UCL HERO -->
+  <section class="wc-hero">
+    <h1>Ліга Чемпіонів 2026/27</h1>
+    <p id="heroRoundLabel">Ліговий етап</p>
+    <div class="hero-leaderboard">
+      <div class="leaderboard-cards" id="leaderboardBody">
+        <div class="lb-empty">Поки немає завершених матчів 🕐</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stripe-bar"></div>
+
+  <!-- MATCHDAY TABS -->
+  <div class="round-tabs-bar" id="uclTabs">
+    <button class="round-tab active" data-tab="1" onclick="switchTab('1')">Тур 1</button>
+    <button class="round-tab" data-tab="2" onclick="switchTab('2')">Тур 2</button>
+    <button class="round-tab" data-tab="3" onclick="switchTab('3')">Тур 3</button>
+    <button class="round-tab" data-tab="4" onclick="switchTab('4')">Тур 4</button>
+    <button class="round-tab" data-tab="5" onclick="switchTab('5')">Тур 5</button>
+    <button class="round-tab" data-tab="6" onclick="switchTab('6')">Тур 6</button>
+    <button class="round-tab" data-tab="7" onclick="switchTab('7')">Тур 7</button>
+    <button class="round-tab" data-tab="8" onclick="switchTab('8')">Тур 8</button>
+    <button class="round-tab" data-tab="table" onclick="switchTab('table')">Таблиця</button>
+  </div>
+
+  <section class="ucl-section">
+    <div id="uclContent"></div>
+  </section>
+
+  <!-- SCORING RULES -->
+  <div class="stripe-bar"></div>
+  <section class="rules-section">
+    <h2>🏆 Система балів</h2>
+    <p class="rules-note">Максимум 3 бали за матч · Рахунок основного часу (90 хв)</p>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-icon">🎯</div>
+        <div class="rule-pts">3 бали</div>
+        <div class="rule-desc">Точний рахунок<br/>(наприклад 2:1 → 2:1)</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">✅</div>
+        <div class="rule-pts">1 бал</div>
+        <div class="rule-desc">Правильний напрямок<br/>(2:1 → 3:1 або 2:2 → 1:1)</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">❌</div>
+        <div class="rule-pts">0 балів</div>
+        <div class="rule-desc">Неправильний напрямок<br/>(помилився з переможцем)</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-icon">⏱</div>
+        <div class="rule-pts" style="font-size:1rem;">90 хвилин</div>
+        <div class="rule-desc">Ставка на результат перших двох таймів, додатковий час та серія пенальті не враховуються</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <section class="admin-section" id="adminSection">
+    <div class="admin-header">
+      <h2>⚙️ Адмін: Введення результатів</h2>
+      <button class="btn-delete-admin-preds" onclick="deleteAdminPredictions()">🗑 Видалити всі прогнози адміна</button>
+    </div>
+    <div id="adminMatches"></div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <button class="modal-close-btn" id="modalCloseBtn">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="logic.js?v=20260906-1"></script>
+  <script src="shared.js?v=20260906-1"></script>
+  <script src="ucl-data.js?v=20260906-1"></script>
+  <script src="ucl.js?v=20260906-1"></script>
+</body>
+</html>
