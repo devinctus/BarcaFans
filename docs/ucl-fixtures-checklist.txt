@@ -1,0 +1,152 @@
+=== ТУР 1 ===
+8 вер., 19:45  AEK Athens v LASK
+8 вер., 19:45  Club Brugge v Aston Villa
+8 вер., 22:00  Borussia Dortmund v Villarreal
+8 вер., 22:00  Porto v Manchester City
+8 вер., 22:00  Lille v Real Betis
+8 вер., 22:00  Real Madrid v Inter Milan
+9 вер., 19:45  Barcelona v Feyenoord
+9 вер., 19:45  VfB Stuttgart v Viking
+9 вер., 22:00  Liverpool v Atlético Madrid
+9 вер., 22:00  Paris Saint-Germain v Slovan Bratislava
+9 вер., 22:00  Sporting CP v Galatasaray
+9 вер., 22:00  Napoli v Arsenal
+10 вер., 19:45  Fenerbahçe v Roma
+10 вер., 19:45  PSV Eindhoven v Shakhtar Donetsk
+10 вер., 22:00  Como v RB Leipzig
+10 вер., 22:00  Bayern Munich v Bodø/Glimt
+10 вер., 22:00  Manchester United v Sabah
+10 вер., 22:00  Slavia Prague v Lens
+=== ТУР 2 ===
+13 жовт., 19:45  Lens v Sporting CP
+13 жовт., 19:45  Sabah v Slavia Prague
+13 жовт., 22:00  Arsenal v Lille
+13 жовт., 22:00  Atlético Madrid v Manchester United
+13 жовт., 22:00  Inter Milan v Club Brugge
+13 жовт., 22:00  Galatasaray v Barcelona
+13 жовт., 22:00  RB Leipzig v PSV Eindhoven
+13 жовт., 22:00  Viking v Bayern Munich
+13 жовт., 22:00  Villarreal v Napoli
+14 жовт., 19:45  Feyenoord v Como
+14 жовт., 19:45  LASK v Liverpool
+14 жовт., 22:00  Roma v Real Madrid
+14 жовт., 22:00  Aston Villa v Fenerbahçe
+14 жовт., 22:00  Shakhtar Donetsk v AEK Athens
+14 жовт., 22:00  Bodø/Glimt v Borussia Dortmund
+14 жовт., 22:00  Manchester City v Paris Saint-Germain
+14 жовт., 22:00  Real Betis v Porto
+14 жовт., 22:00  Slovan Bratislava v VfB Stuttgart
+=== ТУР 3 ===
+20 жовт., 19:45  Fenerbahçe v Slavia Prague
+20 жовт., 19:45  Sabah v Borussia Dortmund
+20 жовт., 22:00  Roma v Slovan Bratislava
+20 жовт., 22:00  Porto v PSV Eindhoven
+20 жовт., 22:00  Liverpool v Villarreal
+20 жовт., 22:00  Manchester City v AEK Athens
+20 жовт., 22:00  Paris Saint-Germain v Barcelona
+20 жовт., 22:00  Napoli v Bodø/Glimt
+20 жовт., 22:00  VfB Stuttgart v Atlético Madrid
+21 жовт., 19:45  Como v Manchester United
+21 жовт., 19:45  Lille v Galatasaray
+21 жовт., 22:00  Aston Villa v Viking
+21 жовт., 22:00  Club Brugge v Lens
+21 жовт., 22:00  Bayern Munich v Arsenal
+21 жовт., 22:00  Inter Milan v Shakhtar Donetsk
+21 жовт., 22:00  Real Madrid v RB Leipzig
+21 жовт., 22:00  Real Betis v Feyenoord
+21 жовт., 22:00  Sporting CP v LASK
+=== ТУР 4 ===
+3 лист., 19:45  Shakhtar Donetsk v Sporting CP
+3 лист., 19:45  Galatasaray v VfB Stuttgart
+3 лист., 22:00  Atlético Madrid v Bayern Munich
+3 лист., 22:00  Barcelona v Aston Villa
+3 лист., 22:00  Feyenoord v Inter Milan
+3 лист., 22:00  Bodø/Glimt v Lille
+3 лист., 22:00  LASK v Slovan Bratislava
+3 лист., 22:00  Manchester United v Roma
+3 лист., 22:00  Villarreal v Paris Saint-Germain
+4 лист., 19:45  AEK Athens v Real Madrid
+4 лист., 19:45  Fenerbahçe v Liverpool
+4 лист., 22:00  Borussia Dortmund v Real Betis
+4 лист., 22:00  Porto v Napoli
+4 лист., 22:00  PSV Eindhoven v Club Brugge
+4 лист., 22:00  RB Leipzig v Manchester City
+4 лист., 22:00  Lens v Como
+4 лист., 22:00  Slavia Prague v Arsenal
+4 лист., 22:00  Viking v Sabah
+=== ТУР 5 ===
+24 лист., 19:45  Bodø/Glimt v LASK
+24 лист., 19:45  Galatasaray v Aston Villa
+24 лист., 22:00  Arsenal v Borussia Dortmund
+24 лист., 22:00  Como v AEK Athens
+24 лист., 22:00  Feyenoord v Porto
+24 лист., 22:00  Manchester City v Napoli
+24 лист., 22:00  RB Leipzig v Lens
+24 лист., 22:00  Real Madrid v PSV Eindhoven
+24 лист., 22:00  Slovan Bratislava v Real Betis
+25 лист., 19:45  Sabah v Barcelona
+25 лист., 19:45  Slavia Prague v Villarreal
+25 лист., 22:00  Atlético Madrid v Viking
+25 лист., 22:00  Club Brugge v Liverpool
+25 лист., 22:00  Inter Milan v VfB Stuttgart
+25 лист., 22:00  Shakhtar Donetsk v Fenerbahçe
+25 лист., 22:00  Lille v Bayern Munich
+25 лист., 22:00  Paris Saint-Germain v Roma
+25 лист., 22:00  Sporting CP v Manchester United
+=== ТУР 6 ===
+8 груд., 19:45  Viking v Feyenoord
+8 груд., 19:45  Villarreal v Sabah
+8 груд., 22:00  AEK Athens v Galatasaray
+8 груд., 22:00  Roma v Sporting CP
+8 груд., 22:00  Aston Villa v Paris Saint-Germain
+8 груд., 22:00  Barcelona v Manchester City
+8 груд., 22:00  Bayern Munich v Slavia Prague
+8 груд., 22:00  Manchester United v RB Leipzig
+8 груд., 22:00  Napoli v Club Brugge
+9 груд., 19:45  Real Betis v Como
+9 груд., 19:45  Slovan Bratislava v Shakhtar Donetsk
+9 груд., 22:00  Arsenal v Real Madrid
+9 груд., 22:00  Borussia Dortmund v Inter Milan
+9 груд., 22:00  LASK v Fenerbahçe
+9 груд., 22:00  Liverpool v Porto
+9 груд., 22:00  PSV Eindhoven v Atlético Madrid
+9 груд., 22:00  Lens v Bodø/Glimt
+9 груд., 22:00  VfB Stuttgart v Lille
+=== ТУР 7 ===
+19 січ., 19:45  Bodø/Glimt v Atlético Madrid
+19 січ., 19:45  Galatasaray v Feyenoord
+19 січ., 22:00  AEK Athens v Roma
+19 січ., 22:00  Aston Villa v Borussia Dortmund
+19 січ., 22:00  Inter Milan v Liverpool
+19 січ., 22:00  Porto v Slavia Prague
+19 січ., 22:00  Lille v Slovan Bratislava
+19 січ., 22:00  Real Madrid v LASK
+19 січ., 22:00  VfB Stuttgart v Club Brugge
+20 січ., 19:45  Fenerbahçe v Villarreal
+20 січ., 19:45  Sabah v Napoli
+20 січ., 22:00  Como v Paris Saint-Germain
+20 січ., 22:00  Manchester United v Bayern Munich
+20 січ., 22:00  RB Leipzig v Shakhtar Donetsk
+20 січ., 22:00  Lens v Manchester City
+20 січ., 22:00  Real Betis v Arsenal
+20 січ., 22:00  Sporting CP v Barcelona
+20 січ., 22:00  Viking v PSV Eindhoven
+=== ТУР 8 ===
+27 січ., 22:00  Arsenal v Sabah
+27 січ., 22:00  Roma v Lille
+27 січ., 22:00  Atlético Madrid v Fenerbahçe
+27 січ., 22:00  Borussia Dortmund v AEK Athens
+27 січ., 22:00  Club Brugge v Bodø/Glimt
+27 січ., 22:00  Bayern Munich v Real Betis
+27 січ., 22:00  Barcelona v Como
+27 січ., 22:00  Shakhtar Donetsk v Real Madrid
+27 січ., 22:00  Feyenoord v RB Leipzig
+27 січ., 22:00  LASK v Porto
+27 січ., 22:00  Liverpool v Lens
+27 січ., 22:00  Manchester City v Sporting CP
+27 січ., 22:00  Paris Saint-Germain v Galatasaray
+27 січ., 22:00  PSV Eindhoven v VfB Stuttgart
+27 січ., 22:00  Slavia Prague v Aston Villa
+27 січ., 22:00  Napoli v Viking
+27 січ., 22:00  Villarreal v Manchester United
+27 січ., 22:00  Slovan Bratislava v Inter Milan
