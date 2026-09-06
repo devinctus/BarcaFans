@@ -44,5 +44,38 @@
       .sort((a, b) => b.pts - a.pts || String(a.name).localeCompare(String(b.name)));
   }
 
-  return { calcPoints, getStatus, tallyLeaderboard, LIVE_WINDOW_MS };
+  function computeStandings(teamCodes, matches, results) {
+    const table = {};
+    for (const code of teamCodes) {
+      table[code] = { code, played: 0, win: 0, draw: 0, loss: 0, gf: 0, ga: 0, gd: 0, pts: 0, rank: 0 };
+    }
+    for (const m of matches) {
+      const r = results[m.id];
+      if (!r || r.status !== 'finished') continue;
+      const h = table[m.home], a = table[m.away];
+      if (!h || !a) continue;
+      h.played++; a.played++;
+      h.gf += r.homeGoals; h.ga += r.awayGoals;
+      a.gf += r.awayGoals; a.ga += r.homeGoals;
+      if (r.homeGoals > r.awayGoals)      { h.win++;  a.loss++; h.pts += 3; }
+      else if (r.homeGoals < r.awayGoals) { a.win++;  h.loss++; a.pts += 3; }
+      else                                { h.draw++; a.draw++; h.pts++; a.pts++; }
+    }
+    const rows = Object.values(table);
+    for (const r of rows) r.gd = r.gf - r.ga;
+    rows.sort((x, y) => y.pts - x.pts || y.gd - x.gd || y.gf - x.gf || x.code.localeCompare(y.code));
+    rows.forEach((r, i) => { r.rank = i + 1; });
+    return rows;
+  }
+
+  function currentMatchday(matches, now) {
+    const mds = [...new Set(matches.map(m => m.matchday))].sort((a, b) => a - b);
+    for (const md of mds) {
+      const last = Math.max(...matches.filter(m => m.matchday === md).map(m => Date.parse(m.kickoff)));
+      if (now < last + LIVE_WINDOW_MS) return md;
+    }
+    return mds[mds.length - 1];
+  }
+
+  return { calcPoints, getStatus, tallyLeaderboard, LIVE_WINDOW_MS, computeStandings, currentMatchday };
 });
