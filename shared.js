@@ -12,7 +12,17 @@ const BFShared = (function () {
   /* Tournament config supplied by the page:
      { id, matches: [{id, kickoff, ...}], onRender: () => void, excluded?: string[] } */
   let CFG = null;
-  let matchIdSet = new Set();
+  // Матчі зі списку excluded НЕ враховуються в таблиці лідерів (напр. r32_03
+  // на ЧС-2026), але вони все одно належать турніру. Тому тримаємо два різні
+  // набори id матчів і ніколи не змішуємо їх:
+  //   leaderboardMatchIdSet: тільки матчі, що йдуть у залік очок таблиці лідерів
+  //                          (весь турнір МІНУС excluded)
+  //   tournamentMatchIdSet: УСІ матчі турніру, включно з excluded; це те, що
+  //                         означає "належить цьому турніру" для видалення
+  //                         прогнозів (адмінське "видалити все" має стерти
+  //                         справді ВСІ прогнози турніру, без винятків)
+  let leaderboardMatchIdSet = new Set();
+  let tournamentMatchIdSet = new Set();
 
   const state = {
     currentUser: null,
@@ -25,8 +35,8 @@ const BFShared = (function () {
 
   function init(config) {
     CFG = config;
-    // Матчі зі списку excluded не враховуються в таблиці лідерів.
-    matchIdSet = new Set(
+    tournamentMatchIdSet = new Set(config.matches.map(m => m.id));
+    leaderboardMatchIdSet = new Set(
       config.matches.map(m => m.id).filter(id => !(config.excluded || []).includes(id))
     );
     wireAuth();
@@ -121,7 +131,7 @@ const BFShared = (function () {
     db.collection('predictions').get().then(snap => {
       const rows = [];
       snap.forEach(d => rows.push(d.data()));
-      state.leaderboardData = BFLogic.tallyLeaderboard(rows, state.results, matchIdSet);
+      state.leaderboardData = BFLogic.tallyLeaderboard(rows, state.results, leaderboardMatchIdSet);
       renderLeaderboard();
     });
   }
@@ -201,14 +211,19 @@ const BFShared = (function () {
      collection, which holds every tournament's rows in one place. Without
      scoping, deleting from one tournament's admin page would also wipe the
      other tournament's predictions. BFLogic.scopeToMatchIds keeps only the
-     rows whose matchId belongs to THIS page's matchIdSet (built in init()),
-     so a foreign-tournament prediction is left untouched. */
+     rows whose matchId belongs to THIS page's tournamentMatchIdSet (built in
+     init() from ALL of config.matches), so a foreign-tournament prediction is
+     left untouched. This MUST use tournamentMatchIdSet, not
+     leaderboardMatchIdSet: the confirm dialogs promise deleting every
+     prediction of the tournament, and a match excluded from leaderboard
+     scoring (e.g. r32_03 on WC2026) is still part of the tournament and must
+     still be deleted. */
   async function deleteAllPredictions() {
     if (!isAdmin()) return;
     if (!confirm(`Видалити ВСІ прогнози всіх учасників турніру "${CFG.id}"? Цю дію не можна скасувати.`)) return;
     const snap = await db.collection('predictions').get();
     const rows = snap.docs.map(d => ({ ref: d.ref, matchId: d.data().matchId }));
-    const toDelete = BFLogic.scopeToMatchIds(rows, matchIdSet);
+    const toDelete = BFLogic.scopeToMatchIds(rows, tournamentMatchIdSet);
     if (!toDelete.length) { alert('Прогнозів не знайдено.'); return; }
     const batch = db.batch();
     toDelete.forEach(r => batch.delete(r.ref));
@@ -222,7 +237,7 @@ const BFShared = (function () {
     if (!confirm(`Видалити всі прогнози адміна турніру "${CFG.id}"? Цю дію не можна скасувати.`)) return;
     const snap = await db.collection('predictions').where('email', '==', ADMIN_EMAIL).get();
     const rows = snap.docs.map(d => ({ ref: d.ref, matchId: d.data().matchId }));
-    const toDelete = BFLogic.scopeToMatchIds(rows, matchIdSet);
+    const toDelete = BFLogic.scopeToMatchIds(rows, tournamentMatchIdSet);
     if (!toDelete.length) { alert('Прогнозів адміна не знайдено.'); return; }
     const batch = db.batch();
     toDelete.forEach(r => batch.delete(r.ref));
