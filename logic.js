@@ -21,5 +21,28 @@
     return 'upcoming';
   }
 
-  return { calcPoints, getStatus, LIVE_WINDOW_MS };
+  /* Sums points per user across the matches in matchIdSet.
+     Only matches with a stored, finished result count.
+     name/photo/email follow the last prediction doc seen for that user
+     (email only ever overwritten by a truthy value), matching the
+     pre-extraction behaviour the leaderboard renderer relies on. */
+  function tallyLeaderboard(predictions, results, matchIdSet) {
+    const acc = {};
+    for (const p of predictions) {
+      if (!matchIdSet.has(p.matchId)) continue;
+      const r = results[p.matchId];
+      if (!r || r.status !== 'finished') continue;
+      const e = acc[p.userId] || (acc[p.userId] = {
+        uid: p.userId, pts: 0, name: p.displayName, photo: p.photoURL, email: null
+      });
+      e.pts += calcPoints(p.homeGoals, p.awayGoals, r.homeGoals, r.awayGoals);
+      e.name  = p.displayName;
+      e.photo = p.photoURL;
+      if (p.email) e.email = p.email;
+    }
+    return Object.values(acc)
+      .sort((a, b) => b.pts - a.pts || String(a.name).localeCompare(String(b.name)));
+  }
+
+  return { calcPoints, getStatus, tallyLeaderboard, LIVE_WINDOW_MS };
 });

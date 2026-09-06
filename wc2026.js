@@ -1,7 +1,10 @@
-/* ── FIREBASE INIT ── */
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db   = firebase.firestore();
+/* World Cup 2026 playoff bracket.
+   Firebase, auth, predictions, leaderboard and the modal live in shared.js;
+   this file owns the WC fixture list, the bracket, the round tabs and the
+   admin result rows. */
+
+/* ── SHARED STATE (same object throughout the page lifetime) ── */
+const S = BFShared.state;
 
 /* ── ROUND LABELS ── */
 const ROUND_LABELS = {
@@ -111,13 +114,11 @@ const MATCHES = [
     homeFrom:{type:'winner',matchId:'sf_101'},  awayFrom:{type:'winner',matchId:'sf_102'} },
 ];
 
+/* Матчі, які не враховуються в таблиці лідерів (r32_03 = ПАР–Канада, перший матч) */
+const LEADERBOARD_EXCLUDED = ['r32_03'];
+
 /* ── STATE ── */
-let currentUser     = null;
-let predictions     = {};
-let results         = {};
-let leaderboardData = [];
-let predUnsubscribe = null;
-let activeRound     = 'r32';
+let activeRound = 'r32';
 
 /* ── HELPERS ── */
 function findMatch(id) {
@@ -134,7 +135,7 @@ function getTeamInfo(m, side) {
 function resolveTeam(from) {
   const src = findMatch(from.matchId);
   if (!src) return { code: '?', flag: '', name: '?', tbd: true };
-  const res = results[from.matchId];
+  const res = S.results[from.matchId];
   if (!res?.advancedTeam) {
     const h = getTeamInfo(src, 'home');
     const a = getTeamInfo(src, 'away');
@@ -149,156 +150,25 @@ function resolveTeam(from) {
   return getTeamInfo(src, side);
 }
 
-/* ── SCORING ── */
-function calcPoints(pH, pA, rH, rA) {
-  if (pH === rH && pA === rA) return 3;
-  if (Math.sign(pH - pA) === Math.sign(rH - rA)) return 1;
-  return 0;
-}
-
-/* ── STATUS ── */
-function getStatus(match) {
-  const now        = Date.now();
-  const kickoff    = new Date(match.kickoff).getTime();
-  const predCutoff = kickoff - 60 * 60000;
-  const endTime    = kickoff + 180 * 60000;
-  const res = results[match.id];
-  if (res && res.status === 'finished') return 'finished';
-  if (now >= kickoff && now < endTime)  return 'live';
-  // Прогнози закриваються з початком матчу і лишаються закритими.
-  // (Буфер "за 1 годину до матчу" наразі вимкнено — щоб повернути, замінити kickoff на predCutoff.)
-  if (now >= kickoff)                   return 'closed';
-  return 'upcoming';
-}
-
-function fmtDate(iso) {
-  return new Date(iso).toLocaleString('uk-UA', {
-    timeZone: 'Europe/Kiev',
-    day: 'numeric', month: 'short',
-    hour: '2-digit', minute: '2-digit'
-  });
-}
-
-/* ── AUTH ── */
-function login() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-  auth.signInWithPopup(provider).catch(e => {
-    alert('LOGIN ERROR: ' + e.code + '\n' + e.message);
-    console.error(e);
-  });
-}
-function logout() { auth.signOut(); }
-
-async function saveUserProfile(user) {
-  await db.collection('users').doc(user.uid).set({
-    uid: user.uid, displayName: user.displayName,
-    email: user.email, photoURL: user.photoURL,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
-}
-
-/* ── LOADING STATE ── */
-let _authReady = false, _resultsReady = false;
-function checkHideLoading() {
-  if (!_authReady || !_resultsReady) return;
-  const el = document.getElementById('loadingScreen');
-  if (el) el.classList.add('hidden');
-}
-
-auth.onAuthStateChanged(async user => {
-  currentUser = user;
-  if (predUnsubscribe) { predUnsubscribe(); predUnsubscribe = null; }
-  if (user) {
-    await saveUserProfile(user);
-    predUnsubscribe = db.collection('predictions')
-      .where('userId', '==', user.uid)
-      .onSnapshot(snap => {
-        snap.forEach(d => { predictions[d.data().matchId] = d.data(); });
-        renderAll();
-      });
-  } else {
-    predictions = {};
-    renderAll();
-  }
-  updateNavbar(user);
-  toggleAdmin(user);
-  rebuildLeaderboard();
-  _authReady = true;
-  checkHideLoading();
-});
-
-/* ── RESULTS LISTENER ── */
-db.collection('results').onSnapshot(snap => {
-  results = {};
-  snap.forEach(d => { results[d.id] = d.data(); });
-  if (!userSelectedRound) {
-    activeRound = computeDefaultRound();
-    applyActiveRoundTab();
-  }
-  renderAll();
-  rebuildLeaderboard();
-  if (!_resultsReady) { _resultsReady = true; checkHideLoading(); }
-});
-
-/* ── LEADERBOARD ── */
-// Матчі, які не враховуються в таблиці лідерів (r32_03 = ПАР–Канада, перший матч)
-const LEADERBOARD_EXCLUDED = ['r32_03'];
-function rebuildLeaderboard() {
-  db.collection('predictions').get().then(snap => {
-    const pts = {}, names = {}, photos = {}, emails = {};
-    snap.forEach(d => {
-      const p = d.data();
-      if (LEADERBOARD_EXCLUDED.includes(p.matchId)) return;
-      const r = results[p.matchId];
-      if (!r || r.status !== 'finished') return;
-      const score = calcPoints(p.homeGoals, p.awayGoals, r.homeGoals, r.awayGoals);
-      pts[p.userId]    = (pts[p.userId]    || 0) + score;
-      names[p.userId]  = p.displayName;
-      photos[p.userId] = p.photoURL;
-      if (p.email) emails[p.userId] = p.email;
-    });
-    leaderboardData = Object.entries(pts)
-      .sort((a, b) => b[1] - a[1])
-      .map(([uid, p]) => ({ uid, pts: p, name: names[uid], photo: photos[uid], email: emails[uid] || null }));
-    renderLeaderboard();
-  });
-}
-
-/* ── PREDICTIONS ── */
-async function savePrediction(matchId, homeGoals, awayGoals) {
-  if (!currentUser) return;
-  await db.collection('predictions').doc(`${currentUser.uid}_${matchId}`).set({
-    userId: currentUser.uid, matchId,
-    homeGoals, awayGoals,
-    displayName: currentUser.displayName,
-    photoURL: currentUser.photoURL,
-    email: currentUser.email,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-}
-
-/* ── RESULTS (ADMIN) ── */
-async function saveResult(matchId, homeGoals, awayGoals) {
-  await db.collection('results').doc(matchId).set({
-    homeGoals, awayGoals, status: 'finished',
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
-}
-
-async function setAdvancer(matchId, side) {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-  await db.collection('results').doc(matchId).set({
-    advancedTeam: side,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
+function statusOf(m) {
+  return BFLogic.getStatus(m, S.results, Date.now());
 }
 
 /* ── RENDER ALL ── */
 function renderAll() {
   renderBracket();
-  renderLeaderboard();
+  BFShared.renderLeaderboard();
   renderAdmin();
+}
+
+/* Викликається зі спільного ядра після кожної зміни даних.
+   Поки користувач сам не перемкнув таб, відкриваємо перший незавершений етап. */
+function onRender() {
+  if (!userSelectedRound) {
+    activeRound = computeDefaultRound();
+    applyActiveRoundTab();
+  }
+  renderAll();
 }
 
 /* ── ROUND TABS ── */
@@ -316,7 +186,7 @@ function applyActiveRoundTab() {
 function computeDefaultRound() {
   for (const r of ROUND_ORDER) {
     const ms = MATCHES.filter(m => m.round === r);
-    const allDone = ms.length > 0 && ms.every(m => results[m.id] && results[m.id].status === 'finished');
+    const allDone = ms.length > 0 && ms.every(m => S.results[m.id] && S.results[m.id].status === 'finished');
     if (!allDone) return r;
   }
   return 'final';
@@ -362,18 +232,18 @@ function matchCardHtml(m) {
   const homeTeam = getTeamInfo(m, 'home');
   const awayTeam = getTeamInfo(m, 'away');
   const isTbd    = !!(homeTeam?.tbd || awayTeam?.tbd);
-  const status   = getStatus(m);
-  const pred     = predictions[m.id];
-  const res      = results[m.id];
+  const status   = statusOf(m);
+  const pred     = S.predictions[m.id];
+  const res      = S.results[m.id];
 
   let pts = null;
   if (pred && res && res.status === 'finished')
-    pts = calcPoints(pred.homeGoals, pred.awayGoals, res.homeGoals, res.awayGoals);
+    pts = BFLogic.calcPoints(pred.homeGoals, pred.awayGoals, res.homeGoals, res.awayGoals);
 
   const badgeMap = {
-    upcoming: `<span class="badge badge-upcoming">🕐 ${fmtDate(m.kickoff)} (Київ)</span>`,
+    upcoming: `<span class="badge badge-upcoming">🕐 ${BFShared.fmtDate(m.kickoff)} (Київ)</span>`,
     live:     `<span class="badge badge-live">🔴 LIVE</span>`,
-    closed:   `<span class="badge badge-closed">🔒 ${fmtDate(m.kickoff)}</span>`,
+    closed:   `<span class="badge badge-closed">🔒 ${BFShared.fmtDate(m.kickoff)}</span>`,
     finished: `<span class="badge badge-finished">✅ Завершено</span>`
   };
 
@@ -423,48 +293,30 @@ function matchCardHtml(m) {
     </div>`;
 }
 
-/* ── LEADERBOARD ── */
-function renderLeaderboard() {
-  const el = document.getElementById('leaderboardBody');
-  if (!el) return;
-  const isAdmin = currentUser?.email === ADMIN_EMAIL;
-  const displayData = isAdmin
-    ? leaderboardData
-    : leaderboardData.filter(e => e.email !== ADMIN_EMAIL);
-  if (!displayData.length) {
-    el.innerHTML = '<div class="lb-empty">Поки немає завершених матчів 🕐</div>';
-    return;
-  }
-  const medals = ['🥇', '🥈', '🥉'];
-  const tierClass = ['gold', 'silver', 'bronze'];
-  el.innerHTML = displayData.map((e, i) => {
-    const isAdminEntry = e.email === ADMIN_EMAIL;
-    const displayName  = isAdminEntry ? 'Admin' : e.name;
-    const initials     = displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    const photoHtml    = (!isAdminEntry && e.photo)
-      ? `<img src="${e.photo}" class="lb-avatar" referrerpolicy="no-referrer" />`
-      : `<div class="lb-initials">${initials}</div>`;
-    const medal   = i < 3 ? medals[i] : String(i + 1);
-    const tier    = i < 3 ? tierClass[i] : 'normal';
-    const isMe    = currentUser && e.uid === currentUser.uid;
-    return `
-    <div class="lb-card ${tier}${isMe ? ' lb-me' : ''}">
-      <span class="lb-medal">${medal}</span>
-      ${photoHtml}
-      <span class="lb-name">${displayName}</span>
-      <span class="lb-pts">${e.pts} <span>балів</span></span>
-    </div>`;
-  }).join('');
+/* ── MODAL ──
+   Розвʼязання команд (включно з TBD) — специфіка плей-офф, тож шапку й рядок
+   "пройшла далі" готуємо тут, а сам модал малює спільне ядро. */
+function openModal(matchId) {
+  const m        = findMatch(matchId);
+  const homeTeam = getTeamInfo(m, 'home');
+  const awayTeam = getTeamInfo(m, 'away');
+  const res      = S.results[matchId];
+
+  const advTeam = res?.advancedTeam ? getTeamInfo(m, res.advancedTeam) : null;
+  const advHtml = advTeam && !advTeam.tbd
+    ? `<div class="modal-adv">Пройшла далі збірна → ${advTeam.flag} ${advTeam.name}</div>` : '';
+
+  BFShared.openModal(matchId, {
+    home: homeTeam,
+    away: awayTeam,
+    tbd: !!(homeTeam?.tbd || awayTeam?.tbd),
+    finishedExtraHtml: advHtml
+  });
 }
 
 /* ── ADMIN PANEL ── */
-function toggleAdmin(user) {
-  const sec = document.getElementById('adminSection');
-  sec.classList.toggle('visible', !!(user && user.email === ADMIN_EMAIL));
-}
-
 function renderAdmin() {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+  if (!BFShared.isAdmin()) return;
   const el = document.getElementById('adminMatches');
   const rounds = ['r32', 'r16', 'qf', 'sf', 'final'];
   el.innerHTML = rounds.map(round => {
@@ -480,7 +332,7 @@ function renderAdmin() {
 function adminMatchRowHtml(m) {
   const homeTeam  = getTeamInfo(m, 'home');
   const awayTeam  = getTeamInfo(m, 'away');
-  const res       = results[m.id] || {};
+  const res       = S.results[m.id] || {};
   const adv       = res.advancedTeam;
   const homeLabel = homeTeam.tbd ? homeTeam.name : `${homeTeam.flag} ${homeTeam.code}`;
   const awayLabel = awayTeam.tbd ? awayTeam.name : `${awayTeam.flag} ${awayTeam.code}`;
@@ -489,7 +341,7 @@ function adminMatchRowHtml(m) {
     <div class="admin-match-row">
       <div class="admin-match-top">
         <span class="admin-match-label">${homeLabel} vs ${awayLabel}</span>
-        <span class="admin-match-date">${fmtDate(m.kickoff)}</span>
+        <span class="admin-match-date">${BFShared.fmtDate(m.kickoff)}</span>
       </div>
       <div class="admin-row-controls">
         <div class="adv-toggle">
@@ -513,239 +365,22 @@ function adminMatchRowHtml(m) {
     </div>`;
 }
 
-async function resetResult(matchId) {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-  if (!confirm('Скинути результат матчу? Всі нараховані бали за цей матч будуть анульовані.')) return;
-  await db.collection('results').doc(matchId).delete();
-  delete results[matchId];
-  renderAdmin();
-  renderAll();
-  rebuildLeaderboard();
-}
-
-async function deleteAllPredictions() {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-  if (!confirm('Видалити ВСІ прогнози всіх учасників? Цю дію не можна скасувати.')) return;
-  const snap = await db.collection('predictions').get();
-  if (snap.empty) { alert('Прогнозів не знайдено.'); return; }
-  const batch = db.batch();
-  snap.forEach(d => batch.delete(d.ref));
-  await batch.commit();
-  predictions = {};
-  renderAll();
-}
-
-async function deleteAdminPredictions() {
-  if (!currentUser || currentUser.email !== ADMIN_EMAIL) return;
-  if (!confirm('Видалити всі прогнози адміна? Цю дію не можна скасувати.')) return;
-  const snap = await db.collection('predictions').where('email', '==', ADMIN_EMAIL).get();
-  if (snap.empty) { alert('Прогнозів адміна не знайдено.'); return; }
-  const batch = db.batch();
-  snap.forEach(d => batch.delete(d.ref));
-  await batch.commit();
-  snap.forEach(d => { delete predictions[d.data().matchId]; });
-  renderAll();
-}
-
 async function adminSave(matchId, btn) {
   const h = parseInt(document.getElementById(`a_h_${matchId}`).value);
   const a = parseInt(document.getElementById(`a_a_${matchId}`).value);
   if (isNaN(h) || isNaN(a)) return;
   btn.disabled = true;
   btn.textContent = 'Зберігаємо...';
-  await saveResult(matchId, h, a);
+  await BFShared.saveResult(matchId, h, a);
   btn.textContent = '✔ Збережено';
   btn.classList.add('saved');
   btn.disabled = false;
 }
 
-/* ── NAVBAR ── */
-function updateNavbar(user) {
-  const el = document.getElementById('authArea');
-  if (!user) {
-    el.innerHTML = `<button class="btn-login" onclick="login()">Увійти через Google</button>`;
-  } else {
-    el.innerHTML = `
-      <div class="user-info">
-        ${user.photoURL ? `<img src="${user.photoURL}" class="avatar" referrerpolicy="no-referrer" />` : ''}
-        <span>${user.displayName.split(' ')[0]}</span>
-        <button class="btn-logout" onclick="logout()">Вийти</button>
-      </div>`;
-  }
-}
-
-/* ── MODAL ── */
-function openModal(matchId) {
-  const m        = findMatch(matchId);
-  const homeTeam = getTeamInfo(m, 'home');
-  const awayTeam = getTeamInfo(m, 'away');
-  const isTbd    = !!(homeTeam?.tbd || awayTeam?.tbd);
-  const status   = getStatus(m);
-  const pred     = predictions[matchId];
-  const res      = results[matchId];
-
-  let pts = null;
-  if (pred && res && res.status === 'finished')
-    pts = calcPoints(pred.homeGoals, pred.awayGoals, res.homeGoals, res.awayGoals);
-
-  const ptsHtml = pts === null ? '' :
-    pts === 3 ? '<div class="pts-msg gold">🎯 Точний рахунок! +3 бали</div>' :
-    pts === 1 ? '<div class="pts-msg green">✅ Правильний напрямок! +1 бал</div>' :
-                '<div class="pts-msg red">😔 Не пощастило! +0 балів</div>';
-
-  const headerHtml = `
-    <div class="modal-header">
-      <div class="modal-teams">
-        <div class="modal-team${isTbd ? ' tbd' : ''}">
-          <span class="big-flag">${homeTeam.flag || '❓'}</span>
-          <span>${homeTeam.name}</span>
-        </div>
-        <div class="modal-vs">vs</div>
-        <div class="modal-team${isTbd ? ' tbd' : ''}">
-          <span class="big-flag">${awayTeam.flag || '❓'}</span>
-          <span>${awayTeam.name}</span>
-        </div>
-      </div>
-      <div class="modal-date">📅 ${fmtDate(m.kickoff)} (за Києвом)</div>
-    </div>`;
-
-  let bodyHtml = '';
-
-  if (isTbd) {
-    bodyHtml = `
-      <div class="modal-tbd">
-        <p>Команди ще не визначені.</p>
-        <p>Повернись після завершення попереднього раунду!</p>
-      </div>`;
-  } else if (!currentUser) {
-    bodyHtml = `
-      <div class="modal-login-prompt">
-        <p>Щоб зробити прогноз, увійдіть через Google</p>
-        <button class="btn-login" onclick="login();closeModal()">Увійти через Google</button>
-      </div>`;
-  } else if (status === 'finished') {
-    const advTeam = res?.advancedTeam ? getTeamInfo(m, res.advancedTeam) : null;
-    const advHtml = advTeam && !advTeam.tbd
-      ? `<div class="modal-adv">Пройшла далі збірна → ${advTeam.flag} ${advTeam.name}</div>` : '';
-    bodyHtml = `
-      <div class="modal-result">
-        <div class="result-score">Результат (90 хв) — <strong>${res.homeGoals} : ${res.awayGoals}</strong></div>
-        ${advHtml}
-        ${pred
-          ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
-          : `<div class="pred-score grey">Ти не робив прогноз</div>`}
-        ${ptsHtml}
-      </div>`;
-  } else if (status === 'live' || status === 'closed') {
-    bodyHtml = `
-      <div class="modal-closed">
-        <div class="closed-icon">${status === 'live' ? '🔴' : '🔒'}</div>
-        <p>${status === 'live' ? 'Матч вже почався — прогнози закриті' : 'Прогнози закриті — матч уже розпочався'}</p>
-        ${pred
-          ? `<div class="pred-score">Твій прогноз: ${pred.homeGoals} : ${pred.awayGoals}</div>`
-          : `<div class="pred-score grey">Ти не встиг зробити прогноз</div>`}
-      </div>`;
-  } else {
-    const currentBetHtml = pred ? `
-      <div class="modal-current-bet">
-        <div class="modal-current-bet-label">✓ Твій прогноз</div>
-        <div class="modal-current-bet-score">${pred.homeGoals} : ${pred.awayGoals}</div>
-      </div>` : '';
-    bodyHtml = `
-      ${currentBetHtml}
-      <form onsubmit="submitPrediction(event,'${matchId}')">
-        <div class="score-input">
-          <div class="score-team">
-            <span>${homeTeam.flag}</span>
-            <span class="team-name">${homeTeam.name}</span>
-            <input type="number" id="homeInput" value="${pred ? pred.homeGoals : 0}" min="0" max="19" required />
-          </div>
-          <span class="score-colon">:</span>
-          <div class="score-team">
-            <span>${awayTeam.flag}</span>
-            <span class="team-name">${awayTeam.name}</span>
-            <input type="number" id="awayInput" value="${pred ? pred.awayGoals : 0}" min="0" max="19" required />
-          </div>
-        </div>
-        <button type="submit" class="btn-submit">
-          ${pred ? '🔄 Змінити прогноз' : '⚽ Зробити прогноз'}
-        </button>
-        <p class="deadline-note">🔒 Прогноз можна поставити до початку матчу</p>
-      </form>`;
-  }
-
-  const bettersSection = isTbd ? '' :
-    `<div id="modalBetters" class="modal-betters"><span class="modal-betters-loading">…</span></div>`;
-
-  document.getElementById('modalContent').innerHTML = headerHtml + bodyHtml + bettersSection;
-  document.getElementById('modal').classList.add('open');
-  if (!isTbd) loadMatchBetters(matchId);
-}
-
-async function loadMatchBetters(matchId) {
-  try {
-    const snap = await db.collection('predictions').where('matchId', '==', matchId).get();
-    const el = document.getElementById('modalBetters');
-    if (!el) return;
-    const res = results[matchId];
-    const finished = res && res.status === 'finished';
-    const entries = [];
-    snap.forEach(d => {
-      const p = d.data();
-      if (!p.displayName) return;
-      entries.push(p);
-    });
-    if (!entries.length) {
-      el.innerHTML = `<div class="modal-betters-box modal-betters-empty-box"><p class="modal-betters-empty">Ніхто ще не зробив свій прогноз на гру</p></div>`;
-      return;
-    }
-    if (finished) {
-      entries.sort((a, b) => {
-        const pa = calcPoints(a.homeGoals, a.awayGoals, res.homeGoals, res.awayGoals);
-        const pb = calcPoints(b.homeGoals, b.awayGoals, res.homeGoals, res.awayGoals);
-        return pb - pa;
-      });
-      const rows = entries.map(p => {
-        const name = p.email === ADMIN_EMAIL ? 'Admin' : p.displayName;
-        const pts = calcPoints(p.homeGoals, p.awayGoals, res.homeGoals, res.awayGoals);
-        const ptsClass = pts === 3 ? 'pts-gold' : pts === 1 ? 'pts-green' : 'pts-red';
-        const ptsLabel = pts === 3 ? '3 бали 🎯' : pts === 1 ? '1 бал ✅' : '0 балів';
-        return `<div class="modal-betters-row">
-          <span class="modal-betters-row-name">👤 ${name}</span>
-          <span class="modal-betters-row-pred">${p.homeGoals}:${p.awayGoals}</span>
-          <span class="modal-betters-row-pts ${ptsClass}">${ptsLabel}</span>
-        </div>`;
-      }).join('');
-      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Прогнози учасників:</div>${rows}</div>`;
-    } else {
-      const rows = entries.map(p => {
-        const name = p.email === ADMIN_EMAIL ? 'Admin' : p.displayName;
-        return `<div class="modal-betters-name">👤 ${name}</div>`;
-      }).join('');
-      el.innerHTML = `<div class="modal-betters-box"><div class="modal-betters-label">Прогноз прийнятий від:</div>${rows}</div>`;
-    }
-  } catch(e) {}
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
-
-async function submitPrediction(e, matchId) {
-  e.preventDefault();
-  const h = parseInt(document.getElementById('homeInput').value);
-  const a = parseInt(document.getElementById('awayInput').value);
-  if (isNaN(h) || isNaN(a)) return;
-  const btn = e.target.querySelector('button[type=submit]');
-  btn.disabled = true;
-  btn.textContent = 'Зберігаємо...';
-  await savePrediction(matchId, h, a);
-  predictions[matchId] = { homeGoals: h, awayGoals: a };
-  closeModal();
-}
-
-/* ── CLOSE ON BACKDROP ── */
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
+/* ── START ── */
+BFShared.init({
+  id: 'wc2026',
+  matches: MATCHES,
+  excluded: LEADERBOARD_EXCLUDED,
+  onRender: onRender
 });
-document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
