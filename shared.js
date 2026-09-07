@@ -278,6 +278,11 @@ const BFShared = (function () {
     const awayTeam = teams.away;
     const isTbd    = !!teams.tbd;
     const status   = statusOf(m);
+    /* Label beside each score input. Defaults to the team name; a page may
+       pass an empty scoreLabel when its header already identifies the teams
+       and repeating them would just be noise. */
+    const homeScoreLabel = homeTeam.scoreLabel ?? homeTeam.name;
+    const awayScoreLabel = awayTeam.scoreLabel ?? awayTeam.name;
     const pred     = state.predictions[matchId];
     const res      = state.results[matchId];
 
@@ -352,13 +357,13 @@ const BFShared = (function () {
         <div class="score-input">
           <div class="score-team">
             ${homeTeam.flag ? `<span>${homeTeam.flag}</span>` : ''}
-            <span class="team-name">${homeTeam.name}</span>
+            ${homeScoreLabel ? `<span class="team-name">${homeScoreLabel}</span>` : ''}
             <input type="number" id="homeInput" value="${pred ? pred.homeGoals : 0}" min="0" max="19" required />
           </div>
           <span class="score-colon">:</span>
           <div class="score-team">
             ${awayTeam.flag ? `<span>${awayTeam.flag}</span>` : ''}
-            <span class="team-name">${awayTeam.name}</span>
+            ${awayScoreLabel ? `<span class="team-name">${awayScoreLabel}</span>` : ''}
             <input type="number" id="awayInput" value="${pred ? pred.awayGoals : 0}" min="0" max="19" required />
           </div>
         </div>

@@ -32,12 +32,13 @@ function openModal(matchId) {
   if (!m) return;
   const home = UCL_TEAMS[m.home];
   const away = UCL_TEAMS[m.away];
-  // No `flag`: the crest in the header already identifies the club, and the
-  // country is carried in the name, so the score row needs no second mark.
+  // The header already shows both crests and names, and left is always the
+  // home side, so the score row carries neither a mark nor a label here.
   const team = t => ({
     code: t.code,
     name: `${t.name} ${t.country}`,
-    badge: crestHtml(t, 'modal-crest')
+    badge: crestHtml(t, 'modal-crest'),
+    scoreLabel: ''
   });
   BFShared.openModal(matchId, { home: team(home), away: team(away) });
 }
