@@ -351,13 +351,13 @@ const BFShared = (function () {
       <form onsubmit="submitPrediction(event,'${matchId}')">
         <div class="score-input">
           <div class="score-team">
-            <span>${homeTeam.badge || homeTeam.flag}</span>
+            ${homeTeam.flag ? `<span>${homeTeam.flag}</span>` : ''}
             <span class="team-name">${homeTeam.name}</span>
             <input type="number" id="homeInput" value="${pred ? pred.homeGoals : 0}" min="0" max="19" required />
           </div>
           <span class="score-colon">:</span>
           <div class="score-team">
-            <span>${awayTeam.badge || awayTeam.flag}</span>
+            ${awayTeam.flag ? `<span>${awayTeam.flag}</span>` : ''}
             <span class="team-name">${awayTeam.name}</span>
             <input type="number" id="awayInput" value="${pred ? pred.awayGoals : 0}" min="0" max="19" required />
           </div>
