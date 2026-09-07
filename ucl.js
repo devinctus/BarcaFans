@@ -115,18 +115,31 @@ function switchTab(tab) {
 /* ── ADMIN PANEL ──
    Lets the admin enter and reset a result for all 144 matches, grouped by
    matchday. */
+/* Mirrors the World Cup admin row structure so it picks up the same styling
+   in wc2026.css. The league phase has no advancement, so there is no
+   "who goes through" toggle here. */
 function adminRowHtml(m) {
-  const res = BFShared.state.results[m.id] || {};
-  const h = res.homeGoals != null ? res.homeGoals : '';
-  const a = res.awayGoals != null ? res.awayGoals : '';
+  const res  = BFShared.state.results[m.id] || {};
+  const home = UCL_TEAMS[m.home];
+  const away = UCL_TEAMS[m.away];
+  const done = res.status === 'finished';
   return `
     <div class="admin-match-row">
-      <span class="admin-teams">${UCL_TEAMS[m.home].code} v ${UCL_TEAMS[m.away].code}</span>
-      <input type="number" min="0" max="19" id="a_h_${m.id}" value="${h}" />
-      <span>:</span>
-      <input type="number" min="0" max="19" id="a_a_${m.id}" value="${a}" />
-      <button onclick="uclAdminSave('${m.id}', this)">Зберегти</button>
-      ${res.status === 'finished' ? `<button class="btn-reset-result" onclick="uclResetResult('${m.id}')">↩ Скинути</button>` : ''}
+      <div class="admin-match-top">
+        <span class="admin-match-label">${crestHtml(home, 'club-crest')} ${home.code} vs ${away.code} ${crestHtml(away, 'club-crest')}</span>
+        <span class="admin-match-date">${BFShared.fmtDate(m.kickoff)}</span>
+      </div>
+      <div class="admin-row-controls">
+        <div class="admin-score-inputs">
+          <input type="number" id="a_h_${m.id}" value="${res.homeGoals ?? ''}" min="0" max="19" placeholder="0" />
+          <span>:</span>
+          <input type="number" id="a_a_${m.id}" value="${res.awayGoals ?? ''}" min="0" max="19" placeholder="0" />
+        </div>
+        <button class="btn-save-result${done ? ' saved' : ''}" onclick="uclAdminSave('${m.id}', this)">
+          ${done ? '✔ Збережено' : 'Зберегти'}
+        </button>
+        ${done ? `<button class="btn-reset-result" onclick="uclResetResult('${m.id}')">↩ Скинути</button>` : ''}
+      </div>
     </div>`;
 }
 
@@ -150,6 +163,7 @@ async function uclAdminSave(matchId, btn) {
   btn.textContent = 'Зберігаємо...';
   await BFShared.saveResult(matchId, h, a);
   btn.textContent = '✔ Збережено';
+  btn.classList.add('saved');
   btn.disabled = false;
 }
 
