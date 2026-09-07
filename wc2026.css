@@ -210,7 +210,19 @@
   margin-bottom: 0.5rem;
 }
 
-.team { display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
+/* Equal halves so the vs marker lands on the card's true centre. Sized to
+   content, the two sides differ by however much the team labels differ and
+   the marker drifts with them. Each side keeps hugging its outer edge:
+   row-reverse makes flex-start the right-hand edge for the away team. */
+.team {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
 .team.home { flex-direction: row; }
 .team.away { flex-direction: row-reverse; }
 
@@ -444,16 +456,39 @@
 
 .modal-header { text-align: center; margin-bottom: 1.5rem; }
 
+/* Height of the badge (flag or club crest) at the top of each team column.
+   The vs marker matches it so the three items line up on the same band. */
+:root { --modal-badge-h: 2.5rem; }
+
 .modal-teams {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 1.5rem;
   margin-bottom: 0.6rem;
 }
-.modal-team { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; font-weight: 700; font-size: 0.9rem; }
-.big-flag { font-size: 2.5rem; line-height: 1; }
-.modal-vs { color: var(--text-secondary); font-size: 1rem; font-weight: 700; }
+/* Equal halves. Sized to content, the two columns differ by however much the
+   two club names differ, which pushed vs off centre by a random amount. */
+.modal-team {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.big-flag { font-size: 2.5rem; line-height: var(--modal-badge-h); height: var(--modal-badge-h); }
+/* Same line box as the badge, so vs sits level with the flags/crests rather
+   than drifting to the middle of the whole column. */
+.modal-vs {
+  flex: 0 0 auto;
+  line-height: var(--modal-badge-h);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 700;
+}
 .modal-date { font-size: 0.85rem; color: var(--text-secondary); }
 
 /* Score input */

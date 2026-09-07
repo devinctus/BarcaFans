@@ -10,9 +10,13 @@
 
 /* Crest inside the shared prediction modal. It sits in .big-flag, which is
    sized for an emoji, so the image needs its own explicit box. */
+/* Club crests are taller than the emoji flags the shared modal assumes, so
+   the badge band grows to match and the vs marker follows it. */
+:root { --modal-badge-h: 56px; }
+
 .modal-crest {
-  width: 56px;
-  height: 56px;
+  width: var(--modal-badge-h);
+  height: var(--modal-badge-h);
   object-fit: contain;
   display: block;
   margin: 0 auto;
