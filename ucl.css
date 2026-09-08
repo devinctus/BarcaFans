@@ -10,6 +10,17 @@
 
 /* Crest inside the shared prediction modal. It sits in .big-flag, which is
    sized for an emoji, so the image needs its own explicit box. */
+/* The official Champions League mark is a single dark navy fill, which would
+   all but vanish on this dark page, so it is rendered white the way UEFA
+   shows it on dark backgrounds. */
+.ucl-hero-logo {
+  width: clamp(64px, 11vw, 104px);
+  height: auto;
+  display: block;
+  margin: 0 auto 0.7rem;
+  filter: brightness(0) invert(1);
+}
+
 /* Club crests are taller than the emoji flags the shared modal assumes, so
    the badge band grows to match and the vs marker follows it. */
 :root { --modal-badge-h: 56px; }
